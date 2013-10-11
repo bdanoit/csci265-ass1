@@ -13,11 +13,20 @@ die "Could not create socket: $!\n" unless $sock;
 
 my $client = $sock->accept();
 while ($client) {
-    open FILE, ">test.txt" or die "Can't open: $!";
-    while(<$client>){
-        print FILE $_;
+    my $request = <$client>;
+    chop $request;
+    if($request =~ /^([^\|]+)\|([^\|]+)$/){
+        my $username = $1;
+        my $password = $2;
+        print "Incoming file from $username\n";
+        open(my $handle, ">", "upload/$username") or die "Can't open: $!";
+        while(<$client>){
+            last if $_ eq "|EOF|";
+            print $handle $_;
+        }
+        print "\tFile accepted\n";
+        close $handle;
     }
-    close FILE;
 }
 
 close($sock);
