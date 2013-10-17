@@ -1,0 +1,29 @@
+#################################
+### Requirement Specification ###
+#################################
+
+SQLite storage of username and password
+PW are 12 alnum chars
+6 are shot PWs – erased from database when used
+
+If run out of passwords, go to admin and get more? Client UI request switch? Or prompt on last password: "You are using your last password, please contact ____ to request more passwords."
+
+##################
+## Modules Used ##
+##################
+
+FSYS:
+
+Parameters: switches -> -u for upload, -d for download
+
+Client UI: ./fsys –u <username> -p <pw> <-uf/-df>
+Receiving associative array from client request, using parameters to create request to send to the server.
+
+Admin UI:  ./fsysadmin <-create/-pass/-clear/-delete> <username>
+Admin verifies local machine for security. No external requests allowed
+-clear: removes pw, -delete: removes user
+
+Files stored as plain text as <username>.txt in UserFiles – all same dir
+
+Not Volatile: 
+
