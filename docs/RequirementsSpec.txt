@@ -1,0 +1,55 @@
+#################################
+### Requirement Specification ###
+#################################
+
+SQLite storage of username and password
+
+#############
+## Modules ##
+#############
+
+Server Interface:
+
+Users List:
+
+User:
+
+Receive Client Request:
+
+Receive Admin Request:
+
+Request Type:
+
+Password Generator:
+
+Admin Interface:
+
+## Parse Parameters:
+##### Breaks up: 
+
+## Send Request:
+
+Client Interface:
+
+   Parse Parameters:
+
+   Send Request:
+
+
+FSYS:
+
+Client UI: ./fsys –u <username> -p <pw> <-uf/-df>
+   -uf: upload files
+   -df: download files
+Receiving associative array from client request, using parameters to create request to send to the server.
+
+Admin UI:  ./fsysadmin <-create/-pass/-clear/-delete> <username>
+Admin verifies local machine for security. No external requests allowed
+   -create: create new user
+   -pass: generate new password list
+   -clear: removes pw
+   -delete: removes user
+
+Files stored as plain text as <username>.txt in UserFiles – all same dir
+
+Not Volatile
