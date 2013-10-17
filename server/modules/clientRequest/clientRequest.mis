@@ -1,0 +1,15 @@
+Client Request Interface Specification
+
+Class Method new
+----------------
+Inputs: none
+Exceptions: TBD
+Behaviour:
+    Creates a Request instance
+
+Class Method validate
+---------------------
+Inputs: (string) request
+Exceptions: TBD
+Behaviour:
+    Returns true for valid request, false otherwise

@@ -1,0 +1,34 @@
+User Interface Specification
+
+Class Method new
+----------------
+Inputs: (string) user name
+Exceptions: TBD
+Behaviour:
+    Creates a User instance
+        name        #   instance string for storing user name
+        passwords   #   instance array for storing passwords
+
+Class Method getName
+--------------------
+Inputs: none
+Exceptions: TBD
+Behaviour:
+    Gets the user name
+
+Class Method addPassword
+------------------------
+Inputs: (string) password
+Exceptions: TBD
+Behaviour:
+    Adds password input to instance array
+    
+
+Class Method usePassword
+------------------------
+Inputs: (string) password
+Exceptions: TBD
+Behaviour: 
+    Finds password in instance array
+    Returns true if password exists
+    Returns false if password not found

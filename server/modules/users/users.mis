@@ -1,0 +1,24 @@
+Users Interface Specification
+
+Class Method new
+----------------
+Inputs: none
+Exceptions: TBD
+Behaviour:
+    Creates a Users instance
+        users   #   instance array for storing (User) instance
+
+Class Method add
+----------------
+Inputs: (User) instance
+Exceptions: TBD
+Behaviour:
+    Returns false if (User) already exists
+    Adds (User) to users instance array
+
+Class Method find
+-----------------
+Inputs: (string) user
+Exceptions: TBD
+Behaviour:
+    Finds matching User from users instance array
