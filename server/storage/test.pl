@@ -3,22 +3,11 @@
 # Baleze Danoit
 # CSCI 265
 
+use lib qw(../../lib);
 use lib '../';
 use strict;
 use warnings;
 use storage::storage;
-
-
-my $ontheline;
-open($ontheline, "| cat |") or die ("Not on the line");
-print $ontheline "select * from users;\n";
-
-while(<$ontheline>){
-    print $_;
-}
-
-print $ontheline ".exit\n";
-exit;
 
 
 my $db = storage::storage->new();
