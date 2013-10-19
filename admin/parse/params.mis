@@ -1,0 +1,34 @@
+User Params Specification
+
+Class Method new
+----------------
+Inputs: None
+Exceptions: TBD
+Behaviour:
+    Creates a Params instance
+        command     #   stores the command parsed from arguments
+        user        #   stores the user parsed from arguments
+
+Class Method parse
+------------------
+Inputs: (string) args
+Exceptions:
+    if command is not valid (create,addpw,clean)
+    if user name is not valid
+    if number of parameters is not two
+Behaviour:
+    parses list of arguments and determines validity
+    stores command and user in self
+    changes user to uppercase
+
+Class Method command
+--------------------
+Inputs: None
+Exceptions: None
+Behaviour: retrieves and returns command from self
+
+Class Method user
+-----------------
+Inputs: None
+Exceptions: None
+Behaviour: retrieves and returns user from self
