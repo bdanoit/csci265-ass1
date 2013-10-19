@@ -7,6 +7,7 @@ package storage::storage;
 #       invalid_user_name
 #       user_exists
 #       sqlite_error
+#       invalid_password
 
 $|=1;
 
@@ -59,10 +60,10 @@ sub passwordsByUser{
     return $result;
 }
 
-sub validateUser{
+sub validateEntry{
     my $self = shift @_;
-    my $user = shift @_;
-    return 1 if ($user =~ /^[a-z0-9_]{4,16}$/i);
+    my $entry = shift @_;
+    return 1 if ($entry =~ /^[a-z0-9_]{4,16}$/i);
     return 0;
 }
 
@@ -70,7 +71,7 @@ sub addUser{
     my $self = shift @_;
     my $user = shift @_;
     
-    die exc::exception->new("invalid_user_name") unless $self->validateUser($user);
+    die exc::exception->new("invalid_user_name") unless $self->validateEntry($user);
     
     return $self->query("insert into users values ('$user');");
     return 0;
@@ -79,13 +80,15 @@ sub addUser{
 sub addPasswordsByUser{
     my $self = shift @_;
     my $user = shift @_;
+    #reference to array
     my $list = shift @_; #should be array reference
-    
     die exc::exception->new("bad_array_ref") unless ref($list);
-    die exc::exception->new("invalid_user_name") unless $self->validateUser($user);
     
-    foreach(@$list){
-        $self->query("insert into user_passwords values ('$user', '$_')");
+    die exc::exception->new("invalid_user_name") unless $self->validateEntry($user);
+    
+    foreach my $password (@$list){
+        die exc::exception->new("invalid_password") unless $self->validateEntry($password);
+        $self->query("insert into user_passwords values ('$user', '$password')");
     }
     return 1;
 }
