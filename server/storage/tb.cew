@@ -69,12 +69,17 @@ cew_Ncase($db->addPasswordsByUser($testuser, \@test_passwords),$db->passwordsByU
 @test_passwords = ("pimp@");
 cew_Ecase($db->addPasswordsByUser($testuser, \@test_passwords),"invalid_password")
 
-#Remove password and make sure count is set to 2
+#Remove a password and make sure count is set to 2
 undef @passwords;
 cew_Ncase($db->deletePasswordByUser($testuser, 'barmitzvah'),$db->passwordsByUser($testuser, \@passwords),2,!=);
 
-#Add some passwords to test user
+#Remove all passwords and make sure count is set to 2
 undef @passwords;
-cew_Ncase($db->deleteUser($testuser),$db->passwordsByUser($testuser, \@passwords),0,!=);
+cew_Ncase($db->deletePasswordsByUser($testuser),$db->passwordsByUser($testuser, \@passwords),0,!=);
+
+#Add a password and delete user, make sure no passwords remain for user
+@test_passwords = ("peeyump");
+undef @passwords;
+cew_Ncase($db->addPasswordsByUser($testuser, \@test_passwords);$db->deleteUser($testuser),$db->passwordsByUser($testuser, \@passwords),0,!=);
    
 cew_Summary

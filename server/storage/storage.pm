@@ -22,15 +22,13 @@ sub new{
     my $db = 'fsys.sqlite';
     my $self = {
         db=>$db,
-        error=>'',
         result=>''
     };
 
     #Initialize DataBase from prototype if it does not exist
     unless(-e $db){
-        unless(-e "$db.prototype"){ die exc::exception->new("dbnf") }
+        unless(-e "$db.prototype"){ die exc::exception->new("DataBase Not Found") }
         qx{cp $db.prototype $db};
-        qx{sqlite3 $db "PRAGMA foreign_keys = ON;"};
     }
 
     bless ($self, $class);
@@ -39,39 +37,30 @@ sub new{
 
 sub users{
     my $self = shift @_;
-    #reference to array
-    my $array = shift @_;
-    die exc::exception->new("bad_array_ref") unless ref($array);
+    my $list = shift @_; #reference to array
+    die exc::exception->new("bad_array_ref") unless ref($list);
     
     my $result = $self->query("select * from users;");
-    if($result){ return $self->formatResult($array); }
+    if($result){ return $self->formatResult($list); }
     return $result;
 }
 
 sub passwordsByUser{
     my $self = shift @_;
     my $user = shift @_;
-    #reference to array
-    my $array = shift @_;
-    die exc::exception->new("bad_array_ref") unless ref($array);
+    my $list = shift @_; #reference to array
+    die exc::exception->new("bad_array_ref") unless ref($list);
     
     my $result = $self->query("select password from user_passwords where user_id = '$user';");
-    if($result){ return $self->formatResult($array); }
+    if($result){ return $self->formatResult($list); }
     return $result;
-}
-
-sub validateEntry{
-    my $self = shift @_;
-    my $entry = shift @_;
-    return 1 if ($entry =~ /^[a-z0-9_]{4,16}$/i);
-    return 0;
 }
 
 sub addUser{
     my $self = shift @_;
     my $user = shift @_;
     
-    die exc::exception->new("invalid_user_name") unless $self->validateEntry($user);
+    return 0 unless $self->validateUser($user);
     
     return $self->query("insert into users values ('$user');");
     return 0;
@@ -80,14 +69,13 @@ sub addUser{
 sub addPasswordsByUser{
     my $self = shift @_;
     my $user = shift @_;
-    #reference to array
-    my $list = shift @_; #should be array reference
+    my $list = shift @_; #reference to array
     die exc::exception->new("bad_array_ref") unless ref($list);
     
-    die exc::exception->new("invalid_user_name") unless $self->validateEntry($user);
+    return 0 unless $self->validateUser($user);
     
     foreach my $password (@$list){
-        die exc::exception->new("invalid_password") unless $self->validateEntry($password);
+        return 0 unless $self->validatePassword($password);
         $self->query("insert into user_passwords values ('$user', '$password')");
     }
     return 1;
@@ -96,6 +84,9 @@ sub addPasswordsByUser{
 sub deleteUser{
     my $self = shift @_;
     my $user = shift @_;
+    
+    return 0 unless $self->validateUser($user);
+    
     return $self->query("delete from users where id = '$user';");
     return 1;
 }
@@ -104,6 +95,10 @@ sub deletePasswordByUser{
     my $self = shift @_;
     my $user = shift @_;
     my $password = shift @_;
+    
+    return 0 unless $self->validateUser($user);
+    return 0 unless $self->validatePassword($password);
+    
     return $self->query("delete from user_passwords where user_id = '$user' and password = '$password';");
     return 1;
 }
@@ -127,7 +122,6 @@ sub query{
     };
     
     if($stderr){
-        $self->{'error'} = $stderr;
         $stderr =~ s/\n//g;
         die exc::exception->new($stderr);
         return 0;
@@ -142,24 +136,33 @@ sub formatResult{
     my $self = shift @_;
     
     #Reference to array
-    my $array = shift @_;
-    die exc::exception->new("bad_array_ref") unless ref($array);
+    my $list = shift @_;
+    die exc::exception->new("bad_array_ref") unless ref($list);
     
     my $result = $self->{'result'};
     return 0 unless $result;
     my @rows = split /\n/, $result;
     
-    my $count = 0;
     foreach my $row (@rows){
-        $count++;
-        push @$array, $row;
+        push @$list, $row;
     }
-    return scalar $count;
+    return scalar @$list;
 }
 
-sub error{
+sub validateUser{
     my $self = shift @_;
-    return $self->{'error'};
+    my $entry = shift @_;
+    return 1 if ($entry =~ /^[a-z0-9_]{4,16}$/i);
+    die exc::exception->new("invalid_user_name");
+    return 0;
+}
+
+sub validatePassword{
+    my $self = shift @_;
+    my $entry = shift @_;
+    return 1 if ($entry =~ /^[a-z0-9_]{4,12}$/i);
+    die exc::exception->new("invalid_password");
+    return 0;
 }
 
 1;

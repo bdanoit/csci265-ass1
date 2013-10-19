@@ -1,0 +1,91 @@
+User Storage Specification
+
+Class Method new
+----------------
+Inputs: None
+Exceptions: TBD
+Behaviour:
+    Creates a Storage instance
+        db          #   instance string for storing sqlite database location
+        result      #   instance string for storing sqlite database query result
+
+Class Method users
+------------------
+Inputs: (array reference) list
+Exceptions: if list is not an array reference
+Behaviour: retrieve users and push into list
+
+Class Method passwordsByUser
+----------------------------
+Inputs: (string) user, (array reference) list
+Exceptions: if list is not an array reference
+Behaviour: retrieve user passwords and push into list
+
+Class Method addUser
+--------------------
+Inputs: (string) user
+Exceptions: if user does not validate
+Behaviour: add user to users table
+
+Class Method addPasswordsByUser
+-------------------------------
+Inputs: (string) user, (array reference) list
+Exceptions:
+    if list is not an array reference
+    if user does not validate
+    if passwords do not validate
+Behaviour: add passwords to user_passwords table
+
+Class Method deleteUser
+-----------------------
+Inputs: (string) user
+Exceptions: if user does not validate
+Behaviour: delete user from users table (user_passwords will cascade)
+
+Class Method deletePasswordByUser
+---------------------------------
+Inputs: (string) user, (string) password
+Exceptions:
+    if user does not validate
+    if passwords do not validate
+Behaviour: delete single user password from user_passwords table
+
+Class Method deletePasswordsByUser
+----------------------------------
+Inputs: (string) user
+Exceptions: if user does not validate
+Behaviour: delete all user passwords from user_passwords table
+
+Class Method query
+------------------
+Inputs: (string) sql
+Exceptions: all possible SQL errors
+Behaviour:
+    takes an sql string and executes to database through sqlite3
+    takes result and stores it in self -> result
+
+Class Method formatResult
+-------------------------
+Inputs: (array reference) list
+Exceptions: if list is not an array reference
+Behaviour:
+    takes self -> result and parses it
+    pushes each row into list
+
+Class Method validateUser
+-------------------------
+Inputs: (string) entry
+Exceptions: if entry does not validate
+Behaviour:
+    validates entry
+    returns 1 if it is alphanum between 4-16 chars
+    returns 0 otherwise
+
+Class Method validatePassword
+-----------------------------
+Inputs: (string) entry
+Exceptions: if entry does not validate (alphanum between 4-12 chars)
+Behaviour:
+    validates entry
+    returns 1 if it is alphanum between 4-12 chars
+    returns 0 otherwise
