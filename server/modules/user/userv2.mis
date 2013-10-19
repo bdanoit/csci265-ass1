@@ -1,0 +1,53 @@
+user.mis
+
+
+Normal Behaviour
+****************
+Data:
+(string) username
+(string) password
+(int) valid 
+	default: 0
+
+-----------------------------------------------
+Class Method new
+
+Normal Behaviour:
+Create a new user class
+
+Inputs:
+(string) username
+(string) password
+
+Outputs:
+none
+
+Behaviour:
+Creates new storage object.
+Call validateUser on storage object.
+Call validatePassword on storage.
+If validateUser and validatePassword return true:
+	set valid to 1
+	call deletePasswordByUser (string) username, (string) password
+
+
+
+
+---------------------------------------------
+Class Method valid
+
+Normal Behaviour:
+Return whether the user contains valid parameters
+
+Inputs:
+none
+
+Outputs:
+Value of valid
+
+
+Exceptions
+**********
+
+Assumptions
+***********

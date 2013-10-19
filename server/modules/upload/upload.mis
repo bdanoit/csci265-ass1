@@ -1,0 +1,38 @@
+upload.mis
+
+
+Normal Behaviour
+****************
+Data
+----
+(string) statusMessage
+
+
+Class Method new
+----------------
+Inputs:
+(string) fileLocation
+
+Upload:none
+
+Behaviour:
+	set data
+
+
+Class Method upload
+-------------------
+Inputs:none
+
+Upload:none
+
+Behaviour:
+Move the file located at fileLocation to the files directory //This was decided to make sure file was actual
+Remove all files at fileLocation
+
+
+Exceptions
+**********
+If fileLocation doesn't exist set statusMessage to "unsuccessful"
+If files directory does't exist make a new files directory
+
+
