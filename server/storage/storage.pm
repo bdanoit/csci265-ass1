@@ -2,12 +2,19 @@ package storage::storage;
 
 # Baleze Danoit
 # CSCI 265
+# Error Types:
+#       bad_array_ref
+#       invalid_user_name
+#       user_exists
+#       sqlite_error
 
 $|=1;
 
+use lib '../../lib';
 use strict;
 use warnings;
 use Capture::Tiny qw/capture/;
+use exc::exception;
 
 sub new{
     my $class= shift @_;
@@ -20,7 +27,7 @@ sub new{
 
     #Initialize DataBase from prototype if it does not exist
     unless(-e $db){
-        unless(-e "$db.prototype"){ die "DataBase not found..." }
+        unless(-e "$db.prototype"){ die exc::exception->new("dbnf") }
         qx{cp $db.prototype $db};
         qx{sqlite3 $db "PRAGMA foreign_keys = ON;"};
     }
@@ -31,30 +38,31 @@ sub new{
 
 sub users{
     my $self = shift @_;
+    #reference to array
+    my $array = shift @_;
+    die exc::exception->new("bad_array_ref") unless ref($array);
+    
     my $result = $self->query("select * from users;");
-    if($result){ $self->formatResult('id'); }
-    return $result;
-}
-
-sub passwords{
-    my $self = shift @_;
-    my $result = $self->query("select * from user_passwords;");
-    if($result){ $self->formatResult('user,password'); }
+    if($result){ return $self->formatResult($array); }
     return $result;
 }
 
 sub passwordsByUser{
     my $self = shift @_;
     my $user = shift @_;
+    #reference to array
+    my $array = shift @_;
+    die exc::exception->new("bad_array_ref") unless ref($array);
+    
     my $result = $self->query("select password from user_passwords where user_id = '$user';");
-    if($result){ $self->formatResult('password'); }
+    if($result){ return $self->formatResult($array); }
     return $result;
 }
 
 sub validateUser{
     my $self = shift @_;
     my $user = shift @_;
-    return 1 if ($user =~ /[a-z0-9_]/i);
+    return 1 if ($user =~ /^[a-z0-9_]{4,16}$/i);
     return 0;
 }
 
@@ -62,10 +70,9 @@ sub addUser{
     my $self = shift @_;
     my $user = shift @_;
     
-    die "Username is invalid" unless $self->validateUser($user);
+    die exc::exception->new("invalid_user_name") unless $self->validateUser($user);
     
-    my $result = $self->query("insert into users values ('$user');");
-    return "User '$user' already exists\n" unless $result;
+    return $self->query("insert into users values ('$user');");
     return 0;
 }
 
@@ -74,11 +81,11 @@ sub addPasswordsByUser{
     my $user = shift @_;
     my $list = shift @_; #should be array reference
     
-    die "Password list is not an array reference" unless ref($list);
-    die "Username is invalid" unless $self->validateUser($user);
+    die exc::exception->new("bad_array_ref") unless ref($list);
+    die exc::exception->new("invalid_user_name") unless $self->validateUser($user);
     
     foreach(@$list){
-        die $self->error() unless $self->query("insert into user_passwords values ('$user', '$_')");
+        $self->query("insert into user_passwords values ('$user', '$_')");
     }
     return 1;
 }
@@ -86,7 +93,7 @@ sub addPasswordsByUser{
 sub deleteUser{
     my $self = shift @_;
     my $user = shift @_;
-    die $self->error() unless $self->query("delete from users where id = '$user';");
+    return $self->query("delete from users where id = '$user';");
     return 1;
 }
 
@@ -94,14 +101,14 @@ sub deletePasswordByUser{
     my $self = shift @_;
     my $user = shift @_;
     my $password = shift @_;
-    die $self->error() unless $self->query("delete from user_passwords where user_id = '$user' and password = '$password';");
+    return $self->query("delete from user_passwords where user_id = '$user' and password = '$password';");
     return 1;
 }
 
 sub deletePasswordsByUser{
     my $self = shift @_;
     my $user = shift @_;
-    die $self->error() unless $self->query("delete from user_passwords where user_id = '$user';");
+    return $self->query("delete from user_passwords where user_id = '$user';");
     return 1;
 }
 
@@ -118,6 +125,8 @@ sub query{
     
     if($stderr){
         $self->{'error'} = $stderr;
+        $stderr =~ s/\n//g;
+        die exc::exception->new($stderr);
         return 0;
     }
     else{
@@ -128,32 +137,26 @@ sub query{
 
 sub formatResult{
     my $self = shift @_;
-    my $cols = shift @_;
-    my @data;
+    
+    #Reference to array
+    my $array = shift @_;
+    die exc::exception->new("bad_array_ref") unless ref($array);
+    
     my $result = $self->{'result'};
     return 0 unless $result;
-    die "No keys\n" unless $cols;
-    my @keys = split /,/, $cols;
     my @rows = split /\n/, $result;
-    foreach(@rows){
-        my @columns = split /\|/, $_;
-        die "Keys do not match number of columns...\n" if (scalar @keys != scalar @columns);
-        my %row;
-        for(my $i = 0; $i < scalar @keys; $i++){
-            my $key = $keys[$i];
-            my $column = $columns[$i];
-            $row{$key} = $column;
-        }
-        push @data, \%row;
+    
+    my $count = 0;
+    foreach my $row (@rows){
+        $count++;
+        push @$array, $row;
     }
-    $self->{'data'} = \@data;
+    return scalar $count;
 }
 
-sub result{
-    my $self = shift @_;
-    return $self->{'data'};
-}
 sub error{
     my $self = shift @_;
     return $self->{'error'};
 }
+
+1;

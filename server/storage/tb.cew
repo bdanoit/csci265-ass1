@@ -1,0 +1,79 @@
+#================================================================--
+# Design Unit  : cew testbench for stack
+#
+# File Name    : tb.cew
+#
+# Purpose      : unit testing
+#
+# Note         :
+#
+# Limitations  :
+#
+# Errors       : none known
+#
+# Modules      : stack_adt::stack
+#
+# Dependences  : cew
+#
+# Author       : Peter Walsh, Vancouver Island University
+#
+# System       : Perl (Linux)
+#
+#------------------------------------------------------------------
+# Revision List
+# Version      Author  Date    Changes
+# 1.0          PW      Oct 12  New version
+#================================================================--
+
+$|=1;
+use strict;
+use warnings;
+
+$SIG{__DIE__} =sub { };
+
+include(../../lib/cew/bin/cew.pl)
+
+use lib '../';
+use lib '../../lib';
+
+use strict;
+use warnings;
+use Try::Tiny;
+use storage::storage;
+use exc::exception;
+
+
+
+my @users;
+my @passwords;
+my @test_passwords;
+my $count;
+my $testuser = "TestUser";
+my $db = storage::storage->new();
+
+
+cew_Variables
+
+#Check for invalid user name
+cew_Ecase($db->addUser($testuser.'@'), "invalid_user_name")
+
+#Make sure duplicate users are not allowed
+cew_Ecase($db->addUser($testuser);$db->addUser($testuser), "Error: column id is not unique")
+
+#Users should contain 1 value
+cew_Ncase(,$db->users(\@users),1,!=)
+
+#Add some passwords to test user
+@test_passwords = ("pimp","shizzle","barmitzvah");
+undef @passwords;
+cew_Ncase($db->addPasswordsByUser($testuser, \@test_passwords),$db->passwordsByUser($testuser, \@passwords),3,!=);
+
+#Remove password and make sure count is set to 2
+undef @passwords;
+cew_Ncase($db->deletePasswordByUser($testuser, 'barmitzvah'),$db->passwordsByUser($testuser, \@passwords),2,!=);
+
+#Add some passwords to test user
+undef @passwords;
+cew_Ncase($db->deleteUser($testuser),$db->passwordsByUser($testuser, \@passwords),0,!=);
+   
+cew_Summary
