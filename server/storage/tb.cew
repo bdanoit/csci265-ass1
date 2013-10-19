@@ -60,13 +60,14 @@ cew_Ecase($db->addUser($testuser.'@'), "invalid_user_name")
 #Make sure duplicate users are not allowed
 cew_Ecase($db->addUser($testuser);$db->addUser($testuser), "Error: column id is not unique")
 
-#Users should contain 1 value
-cew_Ncase(,$db->users(\@users),1,!=)
-
 #Add some passwords to test user
 @test_passwords = ("pimp","shizzle","barmitzvah");
 undef @passwords;
 cew_Ncase($db->addPasswordsByUser($testuser, \@test_passwords),$db->passwordsByUser($testuser, \@passwords),3,!=);
+
+#Add an invalid password to test user
+@test_passwords = ("pimp@");
+cew_Ecase($db->addPasswordsByUser($testuser, \@test_passwords),"invalid_password")
 
 #Remove password and make sure count is set to 2
 undef @passwords;
