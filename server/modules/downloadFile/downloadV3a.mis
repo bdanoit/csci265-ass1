@@ -1,0 +1,47 @@
+Download File Specification
+
+Class Method new
+----------------
+Inputs: Username
+Exceptions: If username is not a string throw exception
+Behaviour:
+	Create a downloadFile instance
+		username	         #	instance string for storing username
+		statusMessage	   #	instance string that holds if file retrieving was successful or not (default: "unsuccessful")
+	   downFile          #  instance of the filehandle of the file that was download
+   Return instance of self
+
+
+Class Method status
+------------------
+Inputs: /
+Exceptions: /
+Behaviour: 
+   return 'statusMessage'
+
+
+Class Method downloadFile
+-------------------
+Inputs: /
+Exceptions: 
+   If file does not exist
+Behaviour:
+   Check if there is a file attached to the 'username'
+      If yes, sets the 'downFile' to the file, sets the 'statusMessage' to "successful"
+
+Class Method getFile
+--------------------
+Inputs: /
+Exceptions: 
+   If file does not exist
+Behaviour:
+   return 'downFile'
+
+Class Method downloadComplete
+--------------------
+Inputs: /
+Exceptions: 
+   If file does not exist
+Behaviour:
+   close the filehandle 'downFile'
+
