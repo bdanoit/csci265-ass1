@@ -5,9 +5,9 @@ package storage::storage;
 # Error Types:
 #       bad_array_ref
 #       invalid_user_name
-#       user_exists
-#       sqlite_error
 #       invalid_password
+#       user_exists
+#       all sqlite errors
 
 $|=1;
 
@@ -16,10 +16,13 @@ use strict;
 use warnings;
 use Capture::Tiny qw/capture/;
 use exc::exception;
+use Switch;
 
 sub new{
     my $class= shift @_;
-    my $db = 'fsys.sqlite';
+    my $path = __FILE__;
+    $path =~ s/[^\/]+$//;
+    my $db = $path.'fsys.sqlite';
     my $self = {
         db=>$db,
         result=>''
@@ -27,7 +30,7 @@ sub new{
 
     #Initialize DataBase from prototype if it does not exist
     unless(-e $db){
-        unless(-e "$db.prototype"){ die exc::exception->new("DataBase Not Found") }
+        unless(-e "$db.prototype"){ die exc::exception->new("db_not_found") }
         qx{cp $db.prototype $db};
     }
 
@@ -123,6 +126,11 @@ sub query{
     
     if($stderr){
         $stderr =~ s/\n//g;
+        switch($stderr){
+            case 'Error: column id is not unique'{
+                $stderr = 'user_already_exists';
+            }
+        }
         die exc::exception->new($stderr);
         return 0;
     }

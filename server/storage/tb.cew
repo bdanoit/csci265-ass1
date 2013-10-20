@@ -58,7 +58,7 @@ cew_Variables
 cew_Ecase($db->addUser($testuser.'@'), "invalid_user_name")
 
 #Make sure duplicate users are not allowed
-cew_Ecase($db->addUser($testuser);$db->addUser($testuser), "Error: column id is not unique")
+cew_Ecase($db->addUser($testuser);$db->addUser($testuser), "user_already_exists")
 
 #Add some passwords to test user
 @test_passwords = ("pimp","shizzle","barmitzvah");
