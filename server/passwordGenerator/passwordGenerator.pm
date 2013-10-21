@@ -1,13 +1,15 @@
 package passwordGenerator::passwordGenerator;
 #!/usr/bin/perl
 
-#Mandip Sangha CSCI 265
+#Daniel Deyaegher
+#Mandip Sangha
+#CSCI 265
 
 $|=1;
 
 use strict;
 
-use lib '/home/student/sangham/csci265/assignment1/lib/x86_64-linux-gnu-thread-multi';
+use lib '../../lib/x86_64-linux-gnu-thread-multi';
 use Session::Token;
 
 sub new {

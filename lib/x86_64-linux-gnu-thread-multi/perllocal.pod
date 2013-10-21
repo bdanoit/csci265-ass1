@@ -1,0 +1,22 @@
+=head2 Thu Oct  3 16:09:36 2013: C<Module> L<Session::Token|Session::Token>
+
+=over 4
+
+=item *
+
+C<installed into: /home/student/deyaegdc/Year2/265/lib>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.82>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
