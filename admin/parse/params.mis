@@ -13,7 +13,7 @@ Class Method parse
 ------------------
 Inputs: (string) args
 Exceptions:
-    if command is not valid (create,addpw,clean)
+    if command is not valid (create,addpw,clean, delete)
     if user name is not valid
     if number of parameters is not two
 Behaviour:
