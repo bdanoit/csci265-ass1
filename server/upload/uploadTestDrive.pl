@@ -6,9 +6,9 @@ use strict;
 use upload;
 
 
-open(my $DATA1, "<file1.txt");
+open(my $DATA1, "<","file1.txt");
 
-my $up = uploadTest->new("HI",$DATA1);
+my $up = upload->new("HI",$DATA1);
 
 $up->upload();
 
