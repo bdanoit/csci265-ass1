@@ -1,0 +1,64 @@
+#================================================================--
+# Design Unit  : cew testbench for stack
+#
+# File Name    : tb.cew
+#
+# Purpose      : unit testing
+#
+# Note         :
+#
+# Limitations  :
+#
+# Errors       : none known
+#
+# Modules      : storage::storage
+#
+# Dependences  : cew
+#
+# Author       : Baleze Danoit, Vancouver Island University
+#
+# System       : Perl (Linux)
+#
+#------------------------------------------------------------------
+# Revision List
+# Version      Author  Date    Changes
+# 1.0          BD      Oct 22  New version
+#================================================================--
+
+$|=1;
+use strict;
+use warnings;
+
+$SIG{__DIE__} =sub { };
+
+include(../../lib/cew/bin/cew.pl)
+
+use lib '../';
+use lib '../../lib';
+
+use strict;
+use warnings;
+use Try::Tiny;
+use exc::exception;
+use generate::token;
+
+
+my $length = 64;
+my $testToken = 'abcd1234';
+my $token = generate::token->new($length, $testToken);
+my $file = "test.tmp";
+my $handle;
+
+
+cew_Variables
+
+cew_Ncase(open($handle,">$file"),$token->generate($file),$testToken,ne)
+
+cew_Ecase(print $handle "$testToken\n";close($handle);$token->generate($file), "token_found_in_file")
+
+
+#Check for bad file name
+qx{rm $file};
+cew_Ecase($token->generate($file), "cannot_open_file")
+   
+cew_Summary

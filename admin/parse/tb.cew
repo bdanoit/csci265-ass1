@@ -32,15 +32,15 @@ cew_Ecase($params->parse("test $user"), "invalid_command")
 cew_Ecase($params->parse("create $user@"), "invalid_user_name")
 
 #Test create command
-cew_Ncase($params->parse("create $user"),$params->command(),'create',ne);
-cew_Ncase(,$params->user(),uc($user),ne);
+cew_Ncase($params->parse("create $user"),$params->command,'create',ne);
+cew_Ncase(,$params->user,uc($user),ne);
 
 #Test addpw command
-cew_Ncase($params->parse("addpw $user"),$params->command(),'addpw',ne);
-cew_Ncase(,$params->user(),uc($user),ne);
+cew_Ncase($params->parse("addpw $user"),$params->command,'addpw',ne);
+cew_Ncase(,$params->user,uc($user),ne);
 
 #Test clean command
-cew_Ncase($params->parse("clean $user"),$params->command(),'clean',ne);
-cew_Ncase(,$params->user(),uc($user),ne);
+cew_Ncase($params->parse("clean $user"),$params->command,'clean',ne);
+cew_Ncase(,$params->user,uc($user),ne);
    
 cew_Summary

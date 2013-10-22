@@ -23,8 +23,8 @@ try{
     my $db = storage::storage->new();
     my $password = generate::password->new();
     $params->parse($args);
-    $command = $params->command();
-    $user = $params->user();
+    $command = $params->command;
+    $user = $params->user;
     switch($command){
         case 'create'{
             $db->addUser($user);
