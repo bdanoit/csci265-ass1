@@ -7,13 +7,13 @@ use lib '../';
 use strict;
 use warnings;
 use Try::Tiny;
-use parseClientRequest::parseTest;
+use parseClientRequest::parse;
 
 my $parameters = join(' ', @ARGV);
 
 
 try{
-   my $userRequest = parseClientRequest::parseTest->new();
+   my $userRequest = parseClientRequest::parse->new();
    $userRequest->parseString($parameters);
    my %validRequest = (
       UserName => $userRequest->UserName,
