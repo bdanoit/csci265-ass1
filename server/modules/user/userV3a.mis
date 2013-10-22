@@ -1,0 +1,27 @@
+User Specification
+
+Class Method new
+----------------
+Inputs: username, password
+Exceptions: If username is not a string throw exception
+            If password is not a string throw exception
+Behaviour:
+	Create a downloadFile instance
+		username	      #	instance string for storing username
+      password	      #	instance string for storing password
+		statusMessage	#	instance string that holds if user is a valid user (default: "not valid")
+   Return instance of self
+
+Class Method Valid
+------------------
+Inputs: /
+Exceptions: /
+Behaviour: 
+   Creates new storage object.
+   Call validateUser on storage object.
+   Call validatePassword on storage.
+   If validateUser and validatePassword return true:
+	   set 'statusMessage' to "valid"
+	   call deletePasswordByUser (string) username, (string) password
+   return 'statusMessage'
+

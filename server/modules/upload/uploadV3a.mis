@@ -1,0 +1,29 @@
+Upload File Specification
+
+Class Method new
+----------------
+Inputs: Username, file
+Exceptions: If username is not a string throw exception
+Behaviour:
+	Create a uploadFile instance
+		username	         #	instance string for storing username
+		statusMessage	   #	instance string that holds if file retrieving was successful or not (default: "unsuccessful")
+      uploadFile        #  instance of the filehandle of the file to be upload
+   Return instance of self
+
+Class Method status
+------------------
+Inputs: /
+Exceptions: /
+Behaviour: 
+   return 'statusMessage'
+
+Class Method upload
+-------------------
+Inputs: /
+Exceptions: 
+   If file does not exist
+
+Behaviour:
+   Try to upload the 'uploadFile'  
+      if upload works sets the 'statusMessage' to "successful"

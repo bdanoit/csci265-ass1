@@ -1,0 +1,43 @@
+Parse Client Request Specification
+
+Class Method validate
+----------------
+Inputs: (String) Containing a User Name, a password, and a file location. 
+Exceptions: TBD
+Behaviour:
+   Checks that there is a Key Value pair for each switch
+	Checks that the USERNAME is alphabetic
+	Checks that the PASSWORD is ALPHANUMERIC
+	Checks that you have chosen either UPLOAD or DOWNLOAD in your switch
+	Checks that a file name is PASSED
+   Creates a hash from ARGV switches
+	
+	If a Key-Value pair is missing it will return a HASH with an INVALID argument
+	If a Value is not a valid type it will return INVALID
+	If all checks pass it will return VALID
+
+Assumptions:
+	There are 4 Valid switches: 
+		-U (User Name)
+		-P (Password)
+		-UF (Upload File) 
+		-DF (Download File)
+		
+	The Client interface will pass the Client Request Module a string in the format
+	-Switch Value
+	
+	Switch parameters are found immediately following the switch.
+	
+    Three switches should be present at a time: -U -P and either -UF or -DF
+   
+    If a switch is duplicated, the farthest RIGHT switch will be considered valid.
+   
+	When -P is provided on the command line then the next token must be an ALPHANUMERIC value
+	else output (on a new line) "Error: Invalid Password Type\n".
+
+	When -U is provided on the command line then the next token must be
+	ALPHABETIC else output (on a new line) "Error: Invalid USERNAME\n".
+	
+	Example:
+		"-U UserName -P P4s5w0rD -UF FileName"
+	
