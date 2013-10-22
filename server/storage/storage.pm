@@ -130,12 +130,16 @@ sub query{
             case 'Error: column id is not unique'{
                 $stderr = 'user_already_exists';
             }
+            case 'Error: foreign key constraint failed'{
+                $stderr = 'user_does_not_exist';
+            }
         }
         die exc::exception->new($stderr);
         return 0;
     }
     else{
         $self->{'result'} = $stdout;
+        return 0 unless $stdout;
         return 1;
     }
 }
