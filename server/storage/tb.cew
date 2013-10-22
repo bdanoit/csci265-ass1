@@ -11,18 +11,18 @@
 #
 # Errors       : none known
 #
-# Modules      : stack_adt::stack
+# Modules      : storage::storage
 #
 # Dependences  : cew
 #
-# Author       : Peter Walsh, Vancouver Island University
+# Author       : Baleze Danoit, Vancouver Island University
 #
 # System       : Perl (Linux)
 #
 #------------------------------------------------------------------
 # Revision List
 # Version      Author  Date    Changes
-# 1.0          PW      Oct 12  New version
+# 1.0          BD      Oct 22  New version
 #================================================================--
 
 $|=1;
@@ -60,8 +60,13 @@ cew_Ecase($db->addUser($testuser.'@'), "invalid_user_name")
 #Make sure duplicate users are not allowed
 cew_Ecase($db->addUser($testuser);$db->addUser($testuser), "user_already_exists")
 
-#Add some passwords to test user
+#define test passwords
 @test_passwords = ("pimp","shizzle","barmitzvah");
+
+#Add some passwords to non existant user
+cew_Ecase($db->addPasswordsByUser($testuser.'1234', \@test_passwords), "user_does_not_exist")
+
+#Add some passwords to test user
 undef @passwords;
 cew_Ncase($db->addPasswordsByUser($testuser, \@test_passwords),$db->passwordsByUser($testuser, \@passwords),3,!=);
 

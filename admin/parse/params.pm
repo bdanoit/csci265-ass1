@@ -15,7 +15,6 @@ use lib '../../lib';
 #modules
 use strict;
 use warnings;
-use Capture::Tiny qw/capture/;
 use exc::exception;
 
 
@@ -37,7 +36,7 @@ sub parse{
     if($args =~ /^([^\s]+)\s+([^\s]+)$/){
         my $command = $1;
         my $user = uc($2);
-        die exc::exception->new("invalid_command") unless ($command =~ /^(create|addpw|clean|delete)$/);
+        die exc::exception->new("invalid_command") unless ($command =~ /^(create|addpw|clean)$/);
         die exc::exception->new("invalid_user_name") unless ($user =~ /^[a-z0-9]{4,16}$/i);
         $self->{'command'} = $command;
         $self->{'user'} = $user;
