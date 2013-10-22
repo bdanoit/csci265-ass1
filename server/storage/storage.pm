@@ -59,6 +59,26 @@ sub passwordsByUser{
     return $result;
 }
 
+sub userExists{
+    my $self = shift @_;
+    my $user = shift @_;
+    
+    return 0 unless $self->validateUser($user);
+    
+    return $self->query("select * from users where id = '$user';");
+}
+
+sub passwordByUserExists{
+    my $self = shift @_;
+    my $user = shift @_;
+    my $password = shift @_;
+    
+    return 0 unless $self->validateUser($user);
+    return 0 unless $self->validatePassword($password);
+    
+    return $self->query("select * from user_passwords where user_id = '$user' and password = '$password';");
+}
+
 sub addUser{
     my $self = shift @_;
     my $user = shift @_;
@@ -66,7 +86,6 @@ sub addUser{
     return 0 unless $self->validateUser($user);
     
     return $self->query("insert into users values ('$user');");
-    return 0;
 }
 
 sub addPasswordsByUser{
@@ -139,7 +158,6 @@ sub query{
     }
     else{
         $self->{'result'} = $stdout;
-        return 0 unless $stdout;
         return 1;
     }
 }

@@ -21,6 +21,23 @@ Inputs: (string) user, (array reference) list
 Exceptions: if list is not an array reference
 Behaviour: retrieve user passwords and push into list
 
+Class Method userExists
+-----------------------
+Inputs: (string) user
+Exceptions: None
+Behaviour:
+    validate user
+    return 1 if user exists within users table
+
+Class Method passwordByUserExists
+---------------------------------
+Inputs: (string) user, (string) password
+Exceptions: None
+Behaviour:
+    validate user
+    validate password
+    return 1 if user user/password combination exists within user_passwords table
+
 Class Method addUser
 --------------------
 Inputs: (string) user
