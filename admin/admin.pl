@@ -10,6 +10,7 @@ use strict;
 use warnings;
 use parse::params;
 use storage::storage;
+use generate::password;
 use Try::Tiny;
 use Switch;
 
@@ -20,6 +21,7 @@ my $user;
 try{
     my $params = parse::params->new();
     my $db = storage::storage->new();
+    my $password = generate::password->new();
     $params->parse($args);
     $command = $params->command();
     $user = $params->user();
@@ -29,7 +31,10 @@ try{
             print "User {$user} added\n";
         };
         case 'addpw'{
-            my @passwords = ('TestPass01','TestPass02','TestPass03');
+            my @passwords;
+            for(my $i = 0; $i < 6; $i++){
+                push @passwords, $password->generate();
+            }
             $db->addPasswordsByUser($user, \@passwords);
             print "Passwords added for {$user}\n";
             foreach my $password (@passwords){

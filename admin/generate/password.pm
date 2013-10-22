@@ -1,4 +1,4 @@
-package passwordGenerator::passwordGenerator;
+package generate::password;
 #!/usr/bin/perl
 
 #Daniel Deyaegher
