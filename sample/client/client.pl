@@ -24,30 +24,33 @@ die "Could not create socket: $!\n" unless $server;
 my $args = join(' ', @ARGV);
 
 #Store variables
-my $file;
 my $username;
 my $password;
+my $upload;
+my $download;
+my $handle;
 
 #Check arguments
 while($args =~ /-([a-zA-Z]+)(?: +([^- ]+))?/g){
     my $switch = $1;
     my $value = $2;
-    if($1 !~ /f|u|p/){
+    if($1 !~ /u|p|uf|df/){
         die "Invalid switch\n";
     }
     else{
         switch($switch){
-            case "f" { $file = $value; }
             case "u" { $username = $value; }
             case "p" { $password = $value; }
+            case "uf" { $upload = $value; }
+            case "df" { $download = 1; }
         }
     }
     
 }
 
 #All variables required
-if(!$file){
-    die "No file specified\n";
+if(!$upload && !$download){
+    die "No type specified\n";
 }
 elsif(!$username){
     die "No username specified\n";
@@ -58,12 +61,21 @@ elsif(!$password){
 
 #Execute
 else{
-    open FILE, $file or die "File {$file} could not be opened\n";
-    my $lines = func::file->countLines($file);
-    print $server "$username|$password|$lines\n";
-    while (<FILE>){
-        print $server $_;
+    if($upload){
+        open $handle, $upload or die "File {$upload} could not be opened\n";
+        my $lines = func::file->countLines($upload);
+        print $server "$username|$password|UPLOAD|$lines\n";
+        if($upload){
+            while (<$handle>){
+                print $server $_;
+            }
+        }
+        close $handle;
     }
-    close FILE;
-    print $server "|EOF|";
+    else{
+        print $server "$username|$password|DOWNLOAD|0\n";
+    }
+    
 }
+close($server);
+

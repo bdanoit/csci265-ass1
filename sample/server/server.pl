@@ -17,10 +17,11 @@ while (my $client = $sock->accept()) {
         my $request = <$client>;
         print "<Begin Request\n";
         print "\t$request";
-        if($request =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)\n$/){
+        if($request =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)(?:\|([^\|]+))\n$/){
             my $username = $1;
             my $password = $2;
-            my $line = $3;
+            my $type = $3;
+            my $lines = $4;
             print "\tIncoming file from $username\n";
             open(my $handle, ">", "upload/$username") or die "Can't open: $!";
             while(defined(<$client>)){
