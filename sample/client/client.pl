@@ -1,7 +1,10 @@
 #!/usr/bin/perl
+use lib '../../lib';
 use IO::Socket;
 use Switch;
 use strict;
+use func::file;
+use exc::exception;
 
 $SIG{__DIE__} = sub{
     my $err = shift @_;
@@ -55,8 +58,9 @@ elsif(!$password){
 
 #Execute
 else{
-    print $server "$username|$password\n";
     open FILE, $file or die "File {$file} could not be opened\n";
+    my $lines = func::file->countLines($file);
+    print $server "$username|$password|$lines\n";
     while (<FILE>){
         print $server $_;
     }

@@ -11,23 +11,29 @@ my $sock = new IO::Socket::INET (
 );
 die "Could not create socket: $!\n" unless $sock;
 
-my $client = $sock->accept();
-while ($client) {
-    my $request = <$client>;
-    chop $request;
-    if($request =~ /^([^\|]+)\|([^\|]+)$/){
-        my $username = $1;
-        my $password = $2;
-        print "Incoming file from $username\n";
-        open(my $handle, ">", "upload/$username") or die "Can't open: $!";
-        while(<$client>){
-            last if $_ eq "|EOF|";
-            print $handle $_;
+while (my $client = $sock->accept()) {
+    my $pid = fork();
+    if($pid == 0){
+        my $request = <$client>;
+        print "<Begin Request\n";
+        print "\t$request";
+        if($request =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)\n$/){
+            my $username = $1;
+            my $password = $2;
+            my $line = $3;
+            print "\tIncoming file from $username\n";
+            open(my $handle, ">", "upload/$username") or die "Can't open: $!";
+            while(defined(<$client>)){
+                print $handle $_;
+            }
+            print "\tFile stored\n";
         }
-        print "\tFile accepted\n";
-        close $handle;
+        print ">End Request\n";
+        exit(0);
+    }
+    else{
+        
     }
 }
 
 close($sock);
-
