@@ -12,10 +12,11 @@ my $sock = new IO::Socket::INET (
 die "Could not create socket: $!\n" unless $sock;
 
 while (my $client = $sock->accept()) {
+    print "Accepting Requests on Parent\n";
     my $pid = fork();
     if($pid == 0){
         my $request = <$client>;
-        print "<Begin Request\n";
+        print "<Forked Request on Child\n";
         print "\t$request";
         if($request =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)(?:\|([^\|]+))\n$/){
             my $username = $1;
