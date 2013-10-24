@@ -1,0 +1,94 @@
+Baleze Danoit
+Carsten Wurm
+Daniel Deyaegher
+Gurleen
+John Tribe
+Justin Waterhouse
+Mandip Sangha
+====
+
+////
+FSYS
+////
+
+Description
+++++++++++++++++
+This program is a file submission and retrieval system that runs on any UNIX machine with Perl, SQLite, and C-Shell and is intended to be used as a standalone file submission server.
+
+Normal Behaviour
+++++++++++++++++
+There are two different interfaces that can be accessed via fsys or fsysadmin.
+
+Client: Can upload or download files.
+   Client interface commands run with switches as follows:
+      ./fsys -u <username> -p <password> <-uf/-df>
+
+      Username and password are mandatory, followed by either "-uf" to upload a file to the server, and "-df" to download a file from the server.
+
+Admin: Can create/delete both users and passwords/password lists.
+   Admin interface:
+      ./fsysadmin <-create/-delete/-clean/-addpw> <username>
+   -create: Creates a new user with the name <username>.
+   -delete: Deletes a user with the name <username> .
+   -clean: Deletes the password list from a user with the name <username>.
+   -addpw: Adds one password to the user <username>.
+
+Each password is only useable once, so when a user connects to the server properly with one of their passwords, the server deletes that password from that user's list.
+
+When a user is low on passwords, they will be prompted with a message directing them to contact the administrator to request more.
+
+----------------
+Important Methods:
+----------------
+
+   File Download
+      Inputs:
+         User name, user password, file name.
+      Outputs: 
+         File requested
+      Processing: 
+         The user name and password are verified by the server, and if valid then the function accesses the file and returns it to the user.
+
+   File Upload
+      Inputs: 
+         User name, user password, file name.
+      Outputs: 
+         Success/fail message
+      Processing: 
+         The user name and password are verified by the server, and if valid then the function uploads the file to the proper directory in the server's storage.
+
+   Create New User (admin only)
+      Inputs: 
+         User name to be created.
+      Outputs: 
+         Success or failure message, user name created.
+      Processing: 
+         Checks if user already exists, creates user if possible. Then generates a list of six 12-alphanumeric-character passwords and assigns them to the user.
+
+   Delete user (admin only)
+      Inputs: 
+         User name to be deleted
+      Outputs: 
+         Success or failure message, user name deleted.
+      Processing: 
+         Checks if user exists, deletes password list if possible then deletes the user.
+
+   Generate Password
+      Inputs: 
+         N/A
+      Outputs: 
+         Password generated
+      Processing: 
+         Generates a 12-character alphanumeric password.
+
+Assumptions
++++++++++++
+Users are comfortable with the command-line interface.
+
+Exceptions
+++++++++++
+Invalid Username or password
+Invalid Switch
+Could not connect to server
+Could not create socket
+User does not exist
