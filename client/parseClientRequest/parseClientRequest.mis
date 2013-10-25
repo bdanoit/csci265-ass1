@@ -36,6 +36,7 @@ If there are less than 3 switches an exception will be thrown:
    "too_few_arguments"
 
 Behaviour:
+   Will accept any combination of UPPER/LOWER case letters in switches 
    Checks that there is a Key Value pair for each switch
 	Checks that the USERNAME is alphabetic
 	Checks that the PASSWORD is ALPHANUMERIC
