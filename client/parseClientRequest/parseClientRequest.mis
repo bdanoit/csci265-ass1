@@ -1,5 +1,5 @@
 Parse Client Request Specification
-
+##################################
 
 class Method new
 ----------------
@@ -42,16 +42,13 @@ Behaviour:
 	Checks that the PASSWORD is ALPHANUMERIC
 	Checks that you have chosen either UPLOAD or DOWNLOAD in your switch
 	Checks that a file name is PASSED
-	
 
-Assumptions:
 	There are 4 Valid switches: 
 		-U (User Name)
 		-P (Password)
 		-UF (Upload File) 
 		-DF (Download File)
-		
-	The Client interface will pass the Client Request Module a string in the format
+   The Client interface will pass the Client Request Module a string in the format
 	-Switch Value
 	
 	Switch parameters are found immediately following the switch.
@@ -63,7 +60,7 @@ Assumptions:
 	Example:
 	"./FSysClient -U UserName -P P4s5w0rD -UF FileName"
 
-   
+ Assumptions: None 
    
 Class Method UserName
 ------------------------
@@ -88,7 +85,6 @@ Inputs: None
 Exceptions: None
 Behaviour:
    Returns Request
-   
 Assumptions: Both new and parseString Methods have been used successfully.
 
 Class Method FileName
