@@ -9,6 +9,10 @@ use strict;
 use func::file;
 use exc::exception;
 use Try::Tiny;
+use user::user2;
+use upload::upload;
+use download::download;
+use Switch;
 
 my $sock = new IO::Socket::INET (
     LocalHost => '',
@@ -17,31 +21,50 @@ my $sock = new IO::Socket::INET (
     Listen => 3,
     Reuse => 1
 );
-die exc::exception->new("could_not_create_socket") unless $sock;
+die "could_not_create_socket" unless $sock;
 
+my $child = 0;
 while (my $client = $sock->accept()) {
-    print ">Request Accepted on Parent\n";
+    print "Request Accepted on Parent\n";
+    $child++;
     my $pid = fork();
     if($pid == 0){
         my $request = <$client>;
-        print ">Request Forked to Child\n";
+        print "Request Forked to Child ($child)\n";
         if($request =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)(?:\|([^\|]+))\n$/){
-            my $username = $1;
+            my $user = $1;
             my $password = $2;
             my $type = $3;
             my $lines = $4;
-            print "\tIncoming file from $username\n";
-            open(my $handle, ">", "$username") or die "Can't open: $!";
-            while(defined(my $line = <$client>)){
-                print "\t{$line} added";
-                print $handle $line;
+            try{
+                $user = user::user2->new($user, $password);
+                switch($type){
+                    case 'UPLOAD'{
+                        my $upload = upload::upload->new($user->name, $client);
+                        $upload->upload();
+                    }
+                    case 'DOWNLOAD'{
+                        #my $download = download::download->new($user->name, $client);
+                        #$download->upload();
+                        print "\t$child> Not implemented yet";
+                    }
+                }
             }
-            print "\tFile stored\n";
+            catch{
+                my $ex = $_;
+                if(ref($ex) eq "exc::exception"){
+                    my $exc_name = $ex->get_exc_name();
+                    print "\t$child> $exc_name\n";
+                }
+                else{
+                    print "\t$child> Unknown Exception: $ex\n";
+                }
+            };
         }
         else{
-            print "\tInvalid Request: $request";
+            print "\t$child> Invalid Request: $request";
         }
-        print ">End Request\n";
+        print "\t$child> Request Complete\n";
         exit(0);
     }
     else{

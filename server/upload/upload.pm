@@ -1,4 +1,4 @@
-package upload;
+package upload::upload;
 #!/usr/bin/perl
 
 #Mandip Sangha CSCI 265
