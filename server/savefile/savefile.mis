@@ -1,0 +1,24 @@
+Savefile Specification
+
+Class Method new
+----------------
+Inputs: Username, socket, linecount
+Exceptions: If username not defined
+            If socket not defined
+	    If linecount not defined
+Behaviour:
+	Create a savefile instance
+		username		#instance string for storing username
+		sockets			#instance for socket
+		linecount 		#instance int for number of line in file
+
+Class Method savefileToDir
+--------------------------
+Inputs: /
+Exceptions: If file is locked
+	    If file can't be opened
+	    If file is corrupted
+Behaviour:
+	Reads from socket line by line to a temp file
+		and then moves the temp file to the right spot
+		and returns "successful" if file was upload
