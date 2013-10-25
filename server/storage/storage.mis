@@ -3,7 +3,7 @@ User Storage Specification
 Class Method new
 ----------------
 Inputs: None
-Exceptions: TBD
+Exceptions: None
 Behaviour:
     Creates a Storage instance
         db          #   instance string for storing sqlite database location
@@ -73,22 +73,6 @@ Inputs: (string) user
 Exceptions: if user does not validate
 Behaviour: delete all user passwords from user_passwords table
 
-Class Method query
-------------------
-Inputs: (string) sql
-Exceptions: all possible SQL errors
-Behaviour:
-    takes an sql string and executes to database through sqlite3
-    takes result and stores it in self -> result
-
-Class Method formatResult
--------------------------
-Inputs: (array reference) list
-Exceptions: if list is not an array reference
-Behaviour:
-    takes self -> result and parses it
-    pushes each row into list
-
 Class Method validateUser
 -------------------------
 Inputs: (string) entry
@@ -106,3 +90,11 @@ Behaviour:
     validates entry
     returns 1 if it is alphanum between 4-12 chars
     returns 0 otherwise
+
+Class Method DBIException
+-------------------------
+Inputs: None
+Exceptions: All SQLite Errors
+Behaviour:
+    Checks DBI::err for any SQL errors
+    throws exception containing DBI::errstr if error is present

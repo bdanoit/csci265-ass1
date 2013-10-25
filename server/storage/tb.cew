@@ -29,7 +29,8 @@ $|=1;
 use strict;
 use warnings;
 
-$SIG{__DIE__} =sub { };
+$SIG{__DIE__} = sub{ };
+#$SIG{__WARN__} = sub{ };
 
 include(../../lib/cew/bin/cew.pl)
 
@@ -58,7 +59,7 @@ cew_Variables
 cew_Ecase($db->addUser($testuser.'@'), "invalid_user_name")
 
 #Make sure duplicate users are not allowed
-cew_Ecase($db->addUser($testuser);$db->addUser($testuser), "user_already_exists")
+cew_Ecase($db->addUser($testuser);$db->addUser($testuser), "column id is not unique")
 
 #Make sure newly added user exists
 cew_Ncase(,$db->userExists($testuser),1,!=);
@@ -67,14 +68,14 @@ cew_Ncase(,$db->userExists($testuser),1,!=);
 @test_passwords = ("pimp","shizzle","barmitzvah");
 
 #Add some passwords to non existant user
-cew_Ecase($db->addPasswordsByUser($testuser.'1234', \@test_passwords), "user_does_not_exist")
-
-#Make sure one of newly added passwords exists
-cew_Ncase(,$db->passwordByUserExists($testuser, $test_passwords[2]),1,!=);
+cew_Ecase($db->addPasswordsByUser($testuser.'1234', \@test_passwords), "foreign key constraint failed")
 
 #Add some passwords to test user
 undef @passwords;
 cew_Ncase($db->addPasswordsByUser($testuser, \@test_passwords),$db->passwordsByUser($testuser, \@passwords),3,!=);
+
+#Make sure one of newly added passwords exists
+cew_Ncase(,$db->passwordByUserExists($testuser, $test_passwords[2]),1,!=);
 
 #Add an invalid password to test user
 @test_passwords = ("pimp@");
