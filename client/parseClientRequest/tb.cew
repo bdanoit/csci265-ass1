@@ -1,0 +1,65 @@
+
+
+$SIG{__DIE__} =sub { };
+
+include(../../lib/cew/bin/cew.pl)
+
+use lib '../';
+use lib '../../lib';
+
+$|=1;
+use strict;
+use warnings;
+use Try::Tiny;
+use parseClientRequest::parse;
+use exc::exception;
+
+
+
+my $userRequest = parseClientRequest::parse->new();
+
+cew_Variables
+#############
+# N-CASES
+#############
+
+#Valid Entry - Alpha Alpha
+cew_Ncase($userRequest->parseString("-u User -p Password -uf FileName"),$userRequest->UserName,'User',ne);
+
+#Valid Entry - Alpha AlphaNum
+$userRequest = parseClientRequest::parse->new();
+cew_Ncase($userRequest->parseString("-u User -p P4ssw0rd -uf FileName"),$userRequest->UserName,'User',ne);
+
+#Valid Entry - AlphaNum Alpha
+$userRequest = parseClientRequest::parse->new();
+cew_Ncase($userRequest->parseString("-u Us3r -p Password -uf FileName"),$userRequest->UserName,'Us3r',ne);
+
+#Valid Entry - AlphaNum Alpha
+$userRequest = parseClientRequest::parse->new();
+cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf FileName"),$userRequest->UserName,'Us3r',ne);
+
+
+#############
+# E-CASES
+#############
+
+#Invalid Number of Parameters
+cew_Ecase($userRequest->parseString("-u foo"), "too_few_arguments")
+
+#Missing File Upload/Download Switch and Token
+cew_Ecase($userRequest->parseString("-u foo -p fooo"), "too_few_arguments")
+
+#Missing Token for switch
+cew_Ecase($userRequest->parseString("-u foo -p fooo -uf"), "too_few_arguments")
+
+#Missing switch
+cew_Ecase($userRequest->parseString("-u foo -p fooo foo"), "invalid_password")
+
+#Invalid User Name
+cew_Ecase($userRequest->parseString("-u fo+o -p fooo -uf foo"), "invalid_user_name")
+
+#Invalid Password
+cew_Ecase($userRequest->parseString("-u foo -p fo+o -uf fooblah"), "invalid_password")
+
+
+cew_Summary
