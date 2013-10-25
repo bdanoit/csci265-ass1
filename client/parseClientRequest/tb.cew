@@ -1,13 +1,12 @@
-
-
 $SIG{__DIE__} =sub { };
 
 include(../../lib/cew/bin/cew.pl)
 
+$|=1;
+
 use lib '../';
 use lib '../../lib';
 
-$|=1;
 use strict;
 use warnings;
 use Try::Tiny;
@@ -24,19 +23,23 @@ cew_Variables
 #############
 
 #Valid Entry - Alpha Alpha
-cew_Ncase($userRequest->parseString("-u User -p Password -uf FileName"),$userRequest->UserName,'User',ne);
+cew_Ncase($userRequest->parseString("-u User -p Password -uf FileName"),$userRequest->UserName,'User',ne)
 
 #Valid Entry - Alpha AlphaNum
 $userRequest = parseClientRequest::parse->new();
-cew_Ncase($userRequest->parseString("-u User -p P4ssw0rd -uf FileName"),$userRequest->UserName,'User',ne);
+cew_Ncase($userRequest->parseString("-u User -p P4ssw0rd -uf FileName"),$userRequest->UserName,'User',ne)
 
 #Valid Entry - AlphaNum Alpha
 $userRequest = parseClientRequest::parse->new();
-cew_Ncase($userRequest->parseString("-u Us3r -p Password -uf FileName"),$userRequest->UserName,'Us3r',ne);
+cew_Ncase($userRequest->parseString("-u Us3r -p Password -uf FileName"),$userRequest->UserName,'Us3r',ne)
 
 #Valid Entry - AlphaNum Alpha
 $userRequest = parseClientRequest::parse->new();
-cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf FileName"),$userRequest->UserName,'Us3r',ne);
+cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf FileName"),$userRequest->UserName,'Us3r',ne)
+
+#Valid Entry - Duplicate Switch
+$userRequest = parseClientRequest::parse->new();
+cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf FileName -uf File"),$userRequest->FileName,'File',ne)
 
 
 #############
@@ -47,19 +50,27 @@ cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf FileName"),$userReq
 cew_Ecase($userRequest->parseString("-u foo"), "too_few_arguments")
 
 #Missing File Upload/Download Switch and Token
-cew_Ecase($userRequest->parseString("-u foo -p fooo"), "too_few_arguments")
-
-#Missing Token for switch
-cew_Ecase($userRequest->parseString("-u foo -p fooo -uf"), "too_few_arguments")
-
-#Missing switch
-cew_Ecase($userRequest->parseString("-u foo -p fooo foo"), "invalid_password")
+cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd"), "too_few_arguments")
 
 #Invalid User Name
-cew_Ecase($userRequest->parseString("-u fo+o -p fooo -uf foo"), "invalid_user_name")
+cew_Ecase($userRequest->parseString("-u fo+o -p P4ssw0rd -uf foo"), "invalid_user_name")
+
+#Missing switch
+cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd foo"), "invalid_password")
 
 #Invalid Password
-cew_Ecase($userRequest->parseString("-u foo -p fo+o -uf fooblah"), "invalid_password")
+cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd+ -uf fooblah"), "invalid_password")
 
+#Invalid Switch
+cew_Ecase($userRequest->parseString("-u foo -g P4ssw0rd -uf fooblah"), "invalid_switch")
+
+#missing switch data
+cew_Ecase($userRequest->parseString("-u foo -p -uf fooblah"), "missing_switch_data")
+
+#Missing Token for switch
+cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd -uf"), "missing_switch_data")
+
+#Missing Token for switch
+cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd -uf"), "missing_switch_data")
 
 cew_Summary

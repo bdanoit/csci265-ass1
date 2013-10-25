@@ -32,7 +32,8 @@ sub parseString{
    
    while ($string =~ /-([^-]+)/g)
    {
-      (my $Command, my  $Data) = split(/ /, $1);
+      
+      (my $Command, my  $Data) = split(/ /i, $1, 2);
       #User Name
       if (defined($Data)&&!($Data eq ''))
       {
@@ -48,7 +49,7 @@ sub parseString{
                   $Count--; 
             }
             if ($Data =~ /^[a-z0-9]+$/i)
-            {      
+            {
                $self->{'UserName'} = $Data;         
             }
             else
