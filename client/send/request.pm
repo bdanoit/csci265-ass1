@@ -44,7 +44,7 @@ sub sendRequest{
    my $self = shift @_;
    my $sock = new IO::Socket::INET (
       PeerAddr => 'localhost',
-      PeerPort => '1337',
+      PeerPort => '9337',
       Proto => 'tcp'
    );
    die exc::exception->new('cannot_connect_to_server') unless $sock;

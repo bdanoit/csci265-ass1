@@ -1,4 +1,4 @@
-package savefile;
+package savefile::savefile;
 #!/usr/bin/perl
 
 #Mandip Sangha CSCI 265

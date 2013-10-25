@@ -10,13 +10,13 @@ use func::file;
 use exc::exception;
 use Try::Tiny;
 use user::user2;
-use upload::upload;
+use savefile::savefile;
 use download::download;
 use Switch;
 
 my $sock = new IO::Socket::INET (
     LocalHost => '',
-    LocalPort => '1337',
+    LocalPort => '9337',
     Proto => 'tcp',
     Listen => 3,
     Reuse => 1
@@ -40,8 +40,8 @@ while (my $client = $sock->accept()) {
                 $user = user::user2->new($user, $password);
                 switch($type){
                     case 'UPLOAD'{
-                        my $upload = upload::upload->new($user->name, $client);
-                        $upload->upload();
+                        my $upload = savefile::savefile->new($user->name, $client, $lines);
+                        $upload->savefileToDir();
                     }
                     case 'DOWNLOAD'{
                         #my $download = download::download->new($user->name, $client);
