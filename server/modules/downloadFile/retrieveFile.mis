@@ -1,0 +1,28 @@
+retrieveFile Specification
+
+Class Method new
+----------------
+Inputs: Username, Socket
+Exceptions:
+   - no username is passed
+   - no socked is passed
+
+Behaviour:
+	Create a downloadFile instance
+		username	#	instance string for storing username
+		socket   # instance of the socket
+
+
+Class Method retrieveFileFromDir
+-------------------
+Inputs: 
+Exceptions: 
+   If file does not exist
+
+Behaviour:
+   Check if there is a file attached to the username
+      If yes, copy the file to temp, sets the statusMessage to "successful"
+
+
+
+
