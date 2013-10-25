@@ -29,25 +29,26 @@ sub parseString{
    my $string = shift @_;
    my $Data = "";
    #Grab all of the keys and values from switches
-   while ($string =~ /-([A-Z]+)(?: +([^-]+))/gi)
+   
+   while ($string =~ /-([^-]+)/g)
    {
-      my $Command = $1;
+      (my $Command, my  $Data) = split(/ /, $1);
       #User Name
-      if ($2)
+      if (defined($Data)&&!($Data eq ''))
       {
          $Count++;
          #Grab Data Remove White Space
-         $Data = $2;
          $Data =~ s/^\s+|\s+$//g;
+         
          #User Name
          if ($Command =~ /^U$/i)
          {
             if (!$self->{'UserName'} eq '')
             {  
-               $Count--; 
+                  $Count--; 
             }
             if ($Data =~ /^[a-z0-9]+$/i)
-            {               
+            {      
                $self->{'UserName'} = $Data;         
             }
             else
@@ -64,7 +65,7 @@ sub parseString{
             }
             else
             {  
-               die exc::exception->new("invalid_password");  
+                  die exc::exception->new("invalid_password");  
             }
          }
          #Upload Or Download
@@ -86,7 +87,7 @@ sub parseString{
       }
       else
       {
-         die exc::exception->new("missing_switch_data");
+         die exc::exception->new("missing_switch_data")
       }
    }
    if ($Count < 3)
