@@ -1,20 +1,48 @@
 Parse Client Request Specification
 
-Class Method validate
+
+class Method new
 ----------------
-Inputs: (String) Containing a User Name, a password, and a file location. 
-Exceptions: TBD
+Inputs: None
+Exceptions: None
 Behaviour:
+Creates a class self that contains the methods
+   - parseString
+   - Password
+   - Request
+   - FileName
+Returns reference to self
+Assumptions: None
+
+
+Class Method parseString
+------------------------
+Inputs: (String) Containing a User Name, a password, and a file location. 
+Exceptions:
+
+If the user name is not Alphanumeric an exception will be thrown:
+   "invalid_user_name"
+   
+If the password is not Alphanumeric an exception will be thrown:
+   "invalid_password"
+
+If a switch is used that isn't <-u -p -(uf/df)> an exception will be throw:
+   "invalid_switch"
+   
+If a switch isn't immediately followed by a (user name/password/file name) an exception will be thrown:  
+   "missing_switch_data"
+   
+If there are less than 3 switches an exception will be thrown:
+   "too_few_arguments"
+
+Behaviour:
+   Will accept any combination of UPPER/LOWER case letters in switches 
    Checks that there is a Key Value pair for each switch
 	Checks that the USERNAME is alphabetic
 	Checks that the PASSWORD is ALPHANUMERIC
 	Checks that you have chosen either UPLOAD or DOWNLOAD in your switch
 	Checks that a file name is PASSED
-   Creates a hash from ARGV switches
 	
-	If a Key-Value pair is missing it will return a HASH with an INVALID argument
-	If a Value is not a valid type it will return INVALID
-	If all checks pass it will return VALID
 
 Assumptions:
 	There are 4 Valid switches: 
@@ -28,16 +56,45 @@ Assumptions:
 	
 	Switch parameters are found immediately following the switch.
 	
-    Three switches should be present at a time: -U -P and either -UF or -DF
+   Three switches should be present at a time: -U -P and either -UF or -DF
    
-    If a switch is duplicated, the farthest RIGHT switch will be considered valid.
-   
-	When -P is provided on the command line then the next token must be an ALPHANUMERIC value
-	else output (on a new line) "Error: Invalid Password Type\n".
+   If a switch is duplicated, the farthest RIGHT switch will be considered valid.
 
-	When -U is provided on the command line then the next token must be
-	ALPHABETIC else output (on a new line) "Error: Invalid USERNAME\n".
-	
 	Example:
-		"-U UserName -P P4s5w0rD -UF FileName"
-	
+	"./FSysClient -U UserName -P P4s5w0rD -UF FileName"
+
+   
+   
+Class Method UserName
+------------------------
+Inputs: None
+Exceptions: None
+Behaviour:
+   Returns UserName
+Assumptions: Both new and parseString Methods have been used successfully.
+
+
+Class Method Password
+------------------------
+Inputs: None
+Exceptions: None
+Behaviour:
+   Returns Password
+Assumptions: Both new and parseString Methods have been used successfully.
+
+Class Method Request
+------------------------
+Inputs: None
+Exceptions: None
+Behaviour:
+   Returns Request
+   
+Assumptions: Both new and parseString Methods have been used successfully.
+
+Class Method FileName
+------------------------
+Inputs: None
+Exceptions: None
+Behaviour:
+   Returns FileName
+Assumptions: Both new and parseString Methods have been used successfully.
