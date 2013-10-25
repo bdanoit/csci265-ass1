@@ -1,0 +1,37 @@
+server.mis
+
+
+Normal Behaviour
+****************
+Listen on a socket using tcp
+
+First line of stream:
+	Username:Password:Operation\n
+
+Middle line(s) of stream:
+	A single line from a file
+
+Last line of stream:
+	CLOSE\n
+
+Create new user(Username, Password)
+
+Upload Operation:
+	Direct middle lines of stream into /temp/<Username>.txt
+	new upload(/temp/<Username>.txt)
+	Respond to client "Success\nCLOSE\n"
+
+Download Operation:
+	new download(Username)
+	Respond to client "</temp/<Username>.txt contents>\nCLOSE\n"
+
+
+Exceptions
+**********
+If user->valid() retuned 0 then repond to client "Invalid Credentials\nCLOSE\n"
+If Download Operation returned 0 then repond to client "Download Failed\nCLOSE\n"
+If Upload Operation returned 0 then repond to client "Download Failed\nCLOSE\n"
+
+
+Assumptions
+***********
