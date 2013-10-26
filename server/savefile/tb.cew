@@ -1,17 +1,19 @@
 $|=1;
 use strict;
 use warnings;
-use savefile;
 
+use lib '../';
 use lib '../../lib';
 use exc::exception;
 use Try::Tiny;
+use savefile::savefile;
+
 
 include(../../lib/cew/bin/cew.pl)
 
 $SIG{__DIE__} =sub { };
 
-open(my $file, ">","test");
+open(my $file, ">","test.tmp");
 print $file "foo\n";
 print $file "foo1\n";
 print $file "foo2\n";
@@ -25,19 +27,19 @@ my $testSaveFile1;
 
 cew_Variables
 
-open($stream, "<","test");
-$testSaveFile = savefile->new("hi",$stream,3);
+open($stream, "<","test.tmp");
+$testSaveFile = savefile::savefile->new("hi",$stream,3);
 cew_Ncase(, $testSaveFile->savefileToDir(), "successful", ne)
 close($stream);
 
-open($stream, "<","test");
-$testSaveFile = savefile->new("hi",$stream,4);
+open($stream, "<","test.tmp");
+$testSaveFile = savefile::savefile->new("hi",$stream,4);
 cew_Ecase($testSaveFile->savefileToDir(), "Corrupt file")
 close($stream);
 
-#open($stream, "<","test");
+#open($stream, "<","test.tmp");
 #$testSaveFile = savefile->new("hi",$stream,3);
-#open($stream1, "<","test");
+#open($stream1, "<","test.tmp");
 #$testSaveFile1 = savefile->new("hi",$stream1,3);
 #cew_Ecase($testSaveFile1->savefileToDir(), "file locked")
 #close($stream1);

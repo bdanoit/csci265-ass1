@@ -50,12 +50,12 @@ sub new {
 
 sub savefileToDir {
    my $self = shift @_;
-   my $tempfile = $self->{username}.".tmp";
-   my $datafile = $self->{username}.".dat";
+   my $tempfile = "upload/".$self->{username}.".tmp";
+   my $datafile = "upload/".$self->{username}.".dat";
    my $countline = 0;
    unless(-e $tempfile)
    {
-      if (open(my $file, ">", $tempfile))
+      if (open(my $file, ">",$tempfile))
       {
          my $client = $self->{sockets};
          while(<$client>)
