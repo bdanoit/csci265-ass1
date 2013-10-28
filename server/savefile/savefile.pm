@@ -28,13 +28,6 @@ sub new {
    {
       die exc::exception->new("username not defined");
    }
-   if(defined($linecount)){
-      $self->{linecount} = $linecount;
-   }
-   else
-   {
-      die exc::exception->new("linecount not defined");
-   }
    if(defined($socket)){
       $self->{sockets} = $socket;
    }
@@ -42,25 +35,36 @@ sub new {
    {
       die exc::exception->new("socket not defined");
    }
+   if(defined($linecount)){
+      $self->{linecount} = $linecount;
+   }
+   else
+   {
+      die exc::exception->new("linecount not defined");
+   }
 
    bless ($self, $class);
 
    return $self;
 }
 
-sub savefileToDir {
+sub saveFileToDir {
    my $self = shift @_;
    my $tempfile = "upload/".$self->{username}.".tmp";
    my $datafile = "upload/".$self->{username}.".dat";
    my $countline = 0;
-   unless(-e $tempfile)
+   if (-e $tempfile)
    {
-      if (open(my $file, ">",$tempfile))
+      die exc::exception->new("File locked");
+   }
+   else
+   {
+      if (open(my $handle, ">",$tempfile))
       {
-         my $client = $self->{sockets};
-         while(<$client>)
+         my $sock = $self->{sockets};
+         while(<$sock>)
          {
-            print $file $_;
+            print $handle $_;
             $countline++;
          }
          if( $countline != $self->{linecount})
@@ -71,13 +75,11 @@ sub savefileToDir {
       }
       else
       {
-         die exc::exception->new("can't open file");
+         die exc::exception->new("Can't open file");
       }
-     # unlink $datafile if -e $datafile;
       move $tempfile, $datafile or die "Could not move file";
-     # unlink $tempfile if -e $tempfile;
 
       return "successful";
    }
-   die exc::exception->new("file locked");
+   
 }

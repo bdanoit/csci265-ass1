@@ -35,7 +35,8 @@ sub new {
    {
       die exc::exception -> new("socket not defined");
    }
-   die exc::exception->new("file_does_not_exist") unless (-e $datafile);
+   my $datafile = $self->{username}.".dat";
+   die exc::exception->new("No file exist for user") unless (-e $datafile);
    $self->{fileLineCount} = func::file->countLines($datafile);
 
    bless($self, $class);
@@ -45,7 +46,19 @@ sub new {
 sub retrieveFileFromDir {
    my $self = shift @_;
    my $datafile = $self->{username}.".dat";
+   my $sock = $self->{socket};
    
+   if (open (my $handle, '<', $datafile))
+   {
+      while(defined (my $line = <$handle>)){
+         print $sock $line;
+      }
+      return "successful";
+   }
+   else
+   {
+      die exc::exception->new("Can't find file");
+   }
 }
 
 sub getLineCount {

@@ -1,4 +1,4 @@
-Savefile Specification
+saveFile Specification
 
 Class Method new
 ----------------
@@ -12,13 +12,13 @@ Behaviour:
 		sockets			#instance for socket
 		linecount 		#instance int for number of line in file
 
-Class Method savefileToDir
+Class Method saveFileToDir
 --------------------------
 Inputs: /
 Exceptions: If file is locked
-	    If file can't be opened
-	    If file is corrupted
+	         If file can't be opened
+	         If file is corrupted
 Behaviour:
 	Reads from socket line by line to a temp file
 		and then moves the temp file to the right spot
-		and returns "successful" if file was upload
+		and returns "successful" if file was save

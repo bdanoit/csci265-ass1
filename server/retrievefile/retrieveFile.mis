@@ -1,0 +1,29 @@
+retrieveFile Specification
+
+Class Method new
+----------------
+Inputs: Username, socket
+Exceptions: If username not defined
+            If socket not defined
+Behaviour:
+	Create a retrieveFile instance
+		username		   #instance string for storing username
+		sockets			#instance for socket
+      linecount 		#instance int for number of line in file
+   Check if the user has a file 
+      if yes set retrieveFile instance "linecount" to the line count of the users file
+
+Class Method retrieveFileToDir
+--------------------------
+Inputs: /
+Exceptions: If file can't be opened
+Behaviour:
+	Write from file line by line to socket  
+      and returns "succesful" if the file was retrieved
+
+Class Method getLineCount
+--------------------------
+Inputs: /
+Exceptions: /
+Behaviour:
+   returns the retrieveFile instance "linecount" 

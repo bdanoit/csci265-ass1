@@ -27,6 +27,3 @@ clean:
 
 submit:
 	echo "submit not set up"
-
-cover: tb.pl
-	perl -MDevel::cover tb.pl
