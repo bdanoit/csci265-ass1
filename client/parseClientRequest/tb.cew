@@ -31,11 +31,11 @@ cew_Ncase($userRequest->parseString("-u User -p P4ssw0rd -uf FileName"),$userReq
 
 #Valid Entry - AlphaNum Alpha
 $userRequest = parseClientRequest::parse->new();
-cew_Ncase($userRequest->parseString("-u Us3r -p Password -uf FileName"),$userRequest->UserName,'Us3r',ne)
+cew_Ncase($userRequest->parseString("-u Us3r -p Password -uf FileName"),$userRequest->Request,'UPLOAD',ne)
 
 #Valid Entry - AlphaNum Alpha
 $userRequest = parseClientRequest::parse->new();
-cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf FileName"),$userRequest->UserName,'Us3r',ne)
+cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf FileName"),$userRequest->Password,'P4ssw0rd',ne)
 
 #Valid Entry - Duplicate Switch
 $userRequest = parseClientRequest::parse->new();

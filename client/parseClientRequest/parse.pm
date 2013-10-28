@@ -28,8 +28,7 @@ sub parseString{
    my $self = shift @_;
    my $string = shift @_;
    my $Data = "";
-   #Grab all of the keys and values from switches
-   
+   #Grab all of the keys and values from switches   
    while ($string =~ /-([^-]+)/g)
    {
       
@@ -39,15 +38,10 @@ sub parseString{
       {
          $Count++;
          #Grab Data Remove White Space
-         $Data =~ s/^\s+|\s+$//g;
-         
+         $Data =~ s/^\s+|\s+$//g;         
          #User Name
          if ($Command =~ /^U$/i)
          {
-            if (!$self->{'UserName'} eq '')
-            {  
-                  $Count--; 
-            }
             if ($Data =~ /^[a-z0-9]+$/i)
             {
                $self->{'UserName'} = $Data;         
