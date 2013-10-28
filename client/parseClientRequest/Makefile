@@ -22,6 +22,11 @@ tb.pl: tb.cew $(BD)/cew.pl
 	awk -f $(SD)/bin/addLineNums.awk tb.cew > $(SD)/tmp/tb.num
 	m4 -B20000  $(SD)/tmp/tb.num  | $(INDENT) > tb.pl
 
+cover: tb.pl
+	perl -MDevel::Cover tb.pl
+#	cover -select $(cut) -report
+	rm -r cover_db
+
 clean:
 	rm -f  $(SD)/tmp/* tb.pl
 

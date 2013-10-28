@@ -9,12 +9,6 @@ Behaviour:
         db          #   instance string for storing sqlite database location
         result      #   instance string for storing sqlite database query result
 
-Class Method users
-------------------
-Inputs: (array reference) list
-Exceptions: if list is not an array reference
-Behaviour: retrieve users and push into list
-
 Class Method passwordsByUser
 ----------------------------
 Inputs: (string) user, (array reference) list

@@ -44,26 +44,6 @@ sub new{
     return $self;
 }
 
-sub users{
-    my $self = shift @_;
-    my $db = $self->{'db'};
-    my $list = shift @_; #reference to array
-    die exc::exception->new("bad_array_ref") unless ref($list);
-    
-    my $stmt = $db->prepare("select * from users;") or $self->DBIException();
-    my $result = $stmt->execute() or $self->DBIException();
-    
-    my $all = $stmt->fetchall_arrayref() or $self->DBIException();
-    foreach my $row (@$all) {
-        my ($user) = @$row;
-        push @$list, $user;
-    }
-    undef $all;
-    
-    $stmt->finish();
-    return $result;
-}
-
 sub passwordsByUser{
     my $self = shift @_;
     my $db = $self->{'db'};

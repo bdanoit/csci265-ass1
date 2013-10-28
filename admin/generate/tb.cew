@@ -1,0 +1,28 @@
+$|=1;
+use strict;
+use warnings;
+
+$SIG{__DIE__} =sub { };
+
+include(../../lib/cew/bin/cew.pl)
+
+use lib '../';
+use lib '../../lib';
+
+use strict;
+use warnings;
+use Try::Tiny;
+use generate::password;
+use exc::exception;
+
+my $gen;
+
+
+cew_Variables
+
+
+cew_Ncase($gen = generate::password->new(),length($gen->generate),12,!=);
+
+cew_Ncase($gen = generate::password->new(16),length($gen->generate),16,!=);
+   
+cew_Summary
