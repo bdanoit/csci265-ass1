@@ -50,8 +50,10 @@ sub new {
 
 sub saveFileToDir {
    my $self = shift @_;
-   my $tempfile = "upload/".$self->{username}.".tmp";
-   my $datafile = "upload/".$self->{username}.".dat";
+   my $path = __FILE__;
+   $path =~ s/[^\/]+$//;
+   my $tempfile = $path."upload/".$self->{username}.".tmp";
+   my $datafile = $path."upload/".$self->{username}.".dat";
    my $countline = 0;
    if (-e $tempfile)
    {

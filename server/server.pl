@@ -3,6 +3,7 @@
 #libraries
 use lib qw{../lib};
 
+include('../lib/func/file.pm');
 #modules
 use strict;
 use IO::Socket;

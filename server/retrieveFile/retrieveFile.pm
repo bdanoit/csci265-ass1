@@ -41,7 +41,9 @@ sub new {
 
 sub retrieveFileFromDir {
    my $self = shift @_;
-   my $datafile = $self->{username}.".dat";
+   my $path = __FILE__;
+   $path =~ s/[^\/]+$//;
+   my $datafile = $path.$self->{username}.".dat";
    my $sock = $self->{socket};
    
    if (open (my $handle, '<', $datafile))
@@ -59,7 +61,9 @@ sub retrieveFileFromDir {
 
 sub getLineCount {
    my $self = shift @_;
-   my $datafile = $self->{username}.".dat";
+   my $path = __FILE__;
+   $path =~ s/[^\/]+$//;
+   my $datafile = $path.$self->{username}.".dat";
    die exc::exception->new("no_file_exist_for_user") unless (-e $datafile);
    return func::file->countLines($datafile);
 }

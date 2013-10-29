@@ -1,5 +1,5 @@
 #================================================================--
-# Design Unit  : cew testbench for savefile
+# Design Unit  : cew testbench for saveFile
 #
 # File Name    : tb.cew
 #
@@ -11,7 +11,7 @@
 #
 # Errors       : none known
 #
-# Modules      : savefile::savefile
+# Modules      : saveFile::saveFile
 #
 # Dependences  : cew
 #
@@ -33,7 +33,7 @@ use lib '../';
 use lib '../../lib';
 use exc::exception;
 use Try::Tiny;
-use savefile::savefile;
+use saveFile::saveFile;
 
 
 include(../../lib/cew/bin/cew.pl)
@@ -44,7 +44,7 @@ $SIG{__DIE__} =sub { };
 my $user = "asdfghjkl";
 
 my $stream;
-my $testSaveFile;
+my $testsaveFile;
 
 #Create a test file for the module testing
 open(my $file, ">","test.tmp");
@@ -65,8 +65,8 @@ cew_Variables
 
 #checks if a file can be save if the right parameters are given
 open($stream, "<","test.tmp");
-$testSaveFile = savefile::savefile->new($user,$stream,3);
-cew_Ncase(, $testSaveFile->saveFileToDir(), 1, !=)
+$testsaveFile = saveFile::saveFile->new($user,$stream,3);
+cew_Ncase(, $testsaveFile->saveFileToDir(), 1, !=)
 close($stream);
 
 #++++++++++++++++++++++++++++
@@ -75,17 +75,17 @@ close($stream);
 
 #Make sure when the wrong number of lines is give it throw exception 
 open($stream, "<","test.tmp");
-$testSaveFile = savefile::savefile->new($user,$stream,4);
-cew_Ecase($testSaveFile->saveFileToDir(), "corrupt_file")
+$testsaveFile = saveFile::saveFile->new($user,$stream,4);
+cew_Ecase($testsaveFile->saveFileToDir(), "corrupt_file")
 close($stream);
 
 #Make sure an exception is throw when the wrong parameters are given
-cew_Ecase($testSaveFile = savefile::savefile->new(), "username_not_defined")
+cew_Ecase($testsaveFile = saveFile::saveFile->new(), "username_not_defined")
 
-cew_Ecase($testSaveFile = savefile::savefile->new($user), "socket_not_defined")
+cew_Ecase($testsaveFile = saveFile::saveFile->new($user), "socket_not_defined")
 
 open($stream, "<","test.tmp");
-cew_Ecase($testSaveFile = savefile::savefile->new($user,$stream), "linecount_not_defined")
+cew_Ecase($testsaveFile = saveFile::saveFile->new($user,$stream), "linecount_not_defined")
 close($stream);
 
 #Make sure an exception is throw when user file is locked
@@ -93,8 +93,8 @@ open($stream, ">","upload/$user.tmp");
 print $stream "foo\n";
 close($stream);
 open($stream, "<","test.tmp");
-$testSaveFile = savefile::savefile->new($user,$stream,3);
-cew_Ecase($testSaveFile->saveFileToDir(), "file_locked")
+$testsaveFile = saveFile::saveFile->new($user,$stream,3);
+cew_Ecase($testsaveFile->saveFileToDir(), "file_locked")
 close($stream);
 unlink "upload/$user.tmp" if -e "upload/$user.tmp";
 
