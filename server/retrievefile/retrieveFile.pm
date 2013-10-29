@@ -1,5 +1,5 @@
+package retrievefile::retrieveFile;
 #!/usr/bin/perl
-package retrieveFile;
 use strict
 
 $|=1;
@@ -7,16 +7,14 @@ $|=1;
 use lib '../../lib';
 use exc::exception;
 use func::file;
-use File::Copy 'move';
 
 sub new {
    my $class = shift @_;
    my $username = shift @_;
    my $socket = shift @_;
 
-   my $self = {username => 0,
-               socket => 0,
-               fileLineCount => 0};
+   my $self = {username => undef,
+               socket => undef};
 
    if(defined($username)) 
    {
@@ -24,7 +22,7 @@ sub new {
    }
    else
    {
-      die exc::exception -> new("username not defined");
+      die exc::exception -> new("username_not_defined");
    }
 
    if(defined($socket)) 
@@ -33,11 +31,9 @@ sub new {
    }
    else
    {
-      die exc::exception -> new("socket not defined");
+      die exc::exception -> new("socket_not_defined");
    }
-   my $datafile = $self->{username}.".dat";
-   die exc::exception->new("No file exist for user") unless (-e $datafile);
-   $self->{fileLineCount} = func::file->countLines($datafile);
+ 
 
    bless($self, $class);
    return $self;
@@ -53,15 +49,17 @@ sub retrieveFileFromDir {
       while(defined (my $line = <$handle>)){
          print $sock $line;
       }
-      return "successful";
+      return 1;
    }
    else
    {
-      die exc::exception->new("Can't find file");
+      die exc::exception->new("can_not_find _file");
    }
 }
 
 sub getLineCount {
    my $self = shift @_;
-   return $self->{fileLineCount};
+   my $datafile = $self->{username}.".dat";
+   die exc::exception->new("no_file_exist_for_user") unless (-e $datafile);
+   return func::file->countLines($datafile);
 }

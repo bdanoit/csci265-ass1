@@ -17,30 +17,30 @@ sub new {
    my $socket = shift @_;
    my $linecount = shift @_;
 
-   my $self = {username => 0,
-               sockets => 0,
-               linecount => 0};
+   my $self = {username => undef,
+               sockets => undef,
+               linecount => undef};
 
    if(defined($Usersname)){
       $self->{username} = $Usersname;
    }
    else
    {
-      die exc::exception->new("username not defined");
+      die exc::exception->new("username_not_defined");
    }
    if(defined($socket)){
       $self->{sockets} = $socket;
    }
    else
    {
-      die exc::exception->new("socket not defined");
+      die exc::exception->new("socket_not_defined");
    }
    if(defined($linecount)){
       $self->{linecount} = $linecount;
    }
    else
    {
-      die exc::exception->new("linecount not defined");
+      die exc::exception->new("linecount_not_defined");
    }
 
    bless ($self, $class);
@@ -55,7 +55,7 @@ sub saveFileToDir {
    my $countline = 0;
    if (-e $tempfile)
    {
-      die exc::exception->new("File locked");
+      die exc::exception->new("file_locked");
    }
    else
    {
@@ -70,16 +70,23 @@ sub saveFileToDir {
          if( $countline != $self->{linecount})
          {
             unlink $tempfile if -e $tempfile;
-            die exc::exception->new("Corrupt file");
+            die exc::exception->new("corrupt_file");
          }
       }
       else
       {
-         die exc::exception->new("Can't open file");
+         die exc::exception->new("can't_open_file");
       }
-      move $tempfile, $datafile or die "Could not move file";
-
-      return "successful";
+      if(move ($tempfile, $datafile))
+      {
+         return 1;
+      } 
+      else
+      {
+         unlink $tempfile if -e $tempfile;
+         die exc::exception->new("could_not_move_file");
+      }
+      
    }
    
 }

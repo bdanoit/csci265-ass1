@@ -40,6 +40,12 @@ include(../../lib/cew/bin/cew.pl)
 
 $SIG{__DIE__} =sub { };
 
+#test user 
+my $user = "asdfghjkl";
+
+my $stream;
+my $testSaveFile;
+
 #Create a test file for the module testing
 open(my $file, ">","test.tmp");
 print $file "foo\n";
@@ -47,13 +53,9 @@ print $file "foo1\n";
 print $file "foo2\n";
 close($file);
 
-#test user 
-my $user = "asdfghjkl";
 
-my $stream;
-my $stream1;
-my $testSaveFile;
-my $testSaveFile1;
+
+
 
 cew_Variables
 
@@ -64,7 +66,7 @@ cew_Variables
 #checks if a file can be save if the right parameters are given
 open($stream, "<","test.tmp");
 $testSaveFile = savefile::savefile->new($user,$stream,3);
-cew_Ncase(, $testSaveFile->saveFileToDir(), "successful", ne)
+cew_Ncase(, $testSaveFile->saveFileToDir(), 1, !=)
 close($stream);
 
 #++++++++++++++++++++++++++++
@@ -74,16 +76,16 @@ close($stream);
 #Make sure when the wrong number of lines is give it throw exception 
 open($stream, "<","test.tmp");
 $testSaveFile = savefile::savefile->new($user,$stream,4);
-cew_Ecase($testSaveFile->saveFileToDir(), "Corrupt file")
+cew_Ecase($testSaveFile->saveFileToDir(), "corrupt_file")
 close($stream);
 
 #Make sure an exception is throw when the wrong parameters are given
-cew_Ecase($testSaveFile = savefile::savefile->new(), "username not defined")
+cew_Ecase($testSaveFile = savefile::savefile->new(), "username_not_defined")
 
-cew_Ecase($testSaveFile = savefile::savefile->new($user), "socket not defined")
+cew_Ecase($testSaveFile = savefile::savefile->new($user), "socket_not_defined")
 
 open($stream, "<","test.tmp");
-cew_Ecase($testSaveFile = savefile::savefile->new($user,$stream), "linecount not defined")
+cew_Ecase($testSaveFile = savefile::savefile->new($user,$stream), "linecount_not_defined")
 close($stream);
 
 #Make sure an exception is throw when user file is locked
@@ -92,9 +94,10 @@ print $stream "foo\n";
 close($stream);
 open($stream, "<","test.tmp");
 $testSaveFile = savefile::savefile->new($user,$stream,3);
-cew_Ecase($testSaveFile->saveFileToDir(), "File locked")
+cew_Ecase($testSaveFile->saveFileToDir(), "file_locked")
 close($stream);
-unlink "upload/hi.tmp" if -e "upload/$user.tmp";
+unlink "upload/$user.tmp" if -e "upload/$user.tmp";
 
+#Remove module test file
 unlink "test.tmp" if -e "test.tmp";
 cew_Summary

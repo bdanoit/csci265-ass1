@@ -27,3 +27,8 @@ clean:
 
 submit:
 	echo "submit not set up"
+
+cover: tb.pl
+	perl -MDevel::Cover tb.pl
+#	cover -select $(cut) -report
+	rm -r cover_db
