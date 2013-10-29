@@ -1,9 +1,9 @@
-package retrievefile::retrieveFile;
+package retrieveFile::retrieveFile;
 #!/usr/bin/perl
-use strict
 
 $|=1;
 
+use strict;
 use lib '../../lib';
 use exc::exception;
 use func::file;

@@ -1,84 +1,74 @@
 #!/usr/bin/perl
-use IO::Socket;
-use savefile;
-use user;
+
+#libraries
+use lib qw{../lib};
+
+#modules
 use strict;
+use IO::Socket;
+use func::file;
+use exc::exception;
+use Try::Tiny;
+use user::user2;
+use saveFile::saveFile;
+use retrieveFile::retrieveFile;
+use Switch;
 
 my $sock = new IO::Socket::INET (
     LocalHost => '',
-    LocalPort => '1337',
+    LocalPort => '9337',
     Proto => 'tcp',
     Listen => 3,
     Reuse => 1
 );
-die "Could not create socket: $!\n" unless $sock;
+die "could_not_create_socket" unless $sock;
 
+my $child = 0;
 while (my $client = $sock->accept()) {
-    print "Accepting Requests on Parent\n";
-
+    print "Request Accepted on Parent\n";
+    $child++;
     my $pid = fork();
-    if($pid == 0){ ## check if current proces is a child
-
-        #### code for child process start
+    if($pid == 0){
         my $request = <$client>;
-        print "<Forked Request on Child\n";
-        print "\t$request";
+        print "Request Forked to Child ($child)\n";
         if($request =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)(?:\|([^\|]+))\n$/){
-            my $username = $1;
+            my $user = $1;
             my $password = $2;
             my $type = $3;
             my $lines = $4;
-
-            #create and authorize user
-            try
-            {
-               $newUser = user -> new($username, $password);
+            try{
+                $user = user::user2->new($user, $password);
+                switch($type){
+                    case 'UPLOAD'{
+                        my $upload = saveFile::saveFile->new($user->name, $client, $lines);
+                        $upload->saveFileToDir();
+                    }
+                    case 'DOWNLOAD'{
+                        my $download = retrieveFile::retrieveFile->new($user->name, $client);
+                        $download->retrieveFileFromDir();
+                        print "\t$child> Not implemented yet";
+                    }
+                }
             }
-            catch
-            {
-               # return "invalid password" to client
-            }
-
-            
-            try
-            {            
-
-               if($type eq 'savefile')
-               {
-                  $saveFileObject = savefile -> new($username, $client, $lines);
-                  $saveFileObject -> savefileToDir();
-                  
-               }
-
-               if($type eq 'download')
-               {
-                  #send download module the username
-               }
-         
-            }
-
-            catch
-            {
-               #check what was wrong, send message back to client accordingly
-            }
-
-
-
-            #print "\tIncoming file from $username\n";
-            #open(my $handle, ">", "upload/$username") or die "Can't open: $!";
-            #while(defined(<$client>)){
-            #    print $handle $_;
-            #}
-            #print "\tFile stored\n";
+            catch{
+                my $ex = $_;
+                if(ref($ex) eq "exc::exception"){
+                    my $exc_name = $ex->get_exc_name();
+                    print "\t$child> $exc_name\n";
+                }
+                else{
+                    print "\t$child> Unknown Exception: $ex\n";
+                }
+            };
         }
-        print ">End Request\n";
+        else{
+            print "\t$child> Invalid Request: $request";
+        }
+        print "\t$child> Request Complete\n";
         exit(0);
-        }
-        #### code for child process end
-
+    }
     else{
         
     }
 }
-
 close($sock);
