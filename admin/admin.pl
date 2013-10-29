@@ -45,6 +45,10 @@ try{
             $db->deletePasswordsByUser($user);
             print "All passwords removed for {$user}\n";
         };
+        case 'delete'{
+            $db->deleteUser($user);
+            print "Deleted {$user}\n";
+        };
     };
 }
 catch{

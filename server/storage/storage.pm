@@ -26,8 +26,7 @@ sub new{
     $path =~ s/[^\/]+$//;
     my $dbname = $path.'fsys.sqlite';
     my $self = {
-        db=>undef,
-        result=>''
+        db=>undef
     };
 
     my $db = DBI->connect("dbi:SQLite:dbname=$dbname","","") or $self->DBIException();
@@ -72,8 +71,6 @@ sub userExists{
     my $db = $self->{'db'};
     my $user = shift @_;
     
-    return 0 unless $self->validateUser($user);
-    
     my $result = $db->selectrow_array("select count(id) from users where id = ?;", undef, $user) or $self->DBIException();
     return $result;
 }
@@ -83,9 +80,6 @@ sub passwordByUserExists{
     my $db = $self->{'db'};
     my $user = shift @_;
     my $password = shift @_;
-    
-    return 0 unless $self->validateUser($user);
-    return 0 unless $self->validatePassword($password);
     
     my $result = $db->selectrow_array("select count(*) from user_passwords where user_id = ? and password = ?;", undef, $user, $password) or $self->DBIException();
     return $result;
@@ -123,8 +117,6 @@ sub deleteUser{
     my $db = $self->{'db'};
     my $user = shift @_;
     
-    return 0 unless $self->validateUser($user);
-    
     my $result = $db->do("delete from users where id = ?;", undef, $user) or $self->DBIException();
     return $result;
 }
@@ -134,9 +126,6 @@ sub deletePasswordByUser{
     my $db = $self->{'db'};
     my $user = shift @_;
     my $password = shift @_;
-    
-    return 0 unless $self->validateUser($user);
-    return 0 unless $self->validatePassword($password);
     
     my $result = $db->do("delete from user_passwords where user_id = ? and password = ?;", undef, $user, $password) or $self->DBIException();
     return $result;

@@ -3,7 +3,6 @@
 #libraries
 use lib qw{../lib};
 
-include('../lib/func/file.pm');
 #modules
 use strict;
 use IO::Socket;
@@ -13,6 +12,7 @@ use Try::Tiny;
 use user::user2;
 use saveFile::saveFile;
 use retrieveFile::retrieveFile;
+use parse::request;
 use Switch;
 
 my $sock = new IO::Socket::INET (
@@ -30,41 +30,34 @@ while (my $client = $sock->accept()) {
     $child++;
     my $pid = fork();
     if($pid == 0){
-        my $request = <$client>;
+        my $query = <$client>;
         print "Request Forked to Child ($child)\n";
-        if($request =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)(?:\|([^\|]+))\n$/){
-            my $user = $1;
-            my $password = $2;
-            my $type = $3;
-            my $lines = $4;
-            try{
-                $user = user::user2->new($user, $password);
-                switch($type){
-                    case 'UPLOAD'{
-                        my $upload = saveFile::saveFile->new($user->name, $client, $lines);
-                        $upload->saveFileToDir();
-                    }
-                    case 'DOWNLOAD'{
-                        my $download = retrieveFile::retrieveFile->new($user->name, $client);
-                        $download->retrieveFileFromDir();
-                        print "\t$child> Not implemented yet";
-                    }
+        try{
+            my $request = parse::request->new();
+            print "\t$child> $query";
+            $request->parse($query);
+            my $user = user::user2->new($request->user, $request->password);
+            switch($request->type){
+                case 'UPLOAD'{
+                    my $upload = saveFile::saveFile->new($user->name, $client, $request->lines);
+                    $upload->saveFileToDir();
+                }
+                case 'DOWNLOAD'{
+                    #my $download = retrieveFile::retrieveFile->new($user->name, $client);
+                    #$download->retrieveFileFromDir();
                 }
             }
-            catch{
-                my $ex = $_;
-                if(ref($ex) eq "exc::exception"){
-                    my $exc_name = $ex->get_exc_name();
-                    print "\t$child> $exc_name\n";
-                }
-                else{
-                    print "\t$child> Unknown Exception: $ex\n";
-                }
-            };
         }
-        else{
-            print "\t$child> Invalid Request: $request";
-        }
+        catch{
+            my $ex = $_;
+            if(ref($ex) eq "exc::exception"){
+                my $exc_name = $ex->get_exc_name();
+                print "\t$child> $exc_name\n";
+            }
+            else{
+                print "\t$child> Unknown Exception: $ex\n";
+            }
+        };
         print "\t$child> Request Complete\n";
         exit(0);
     }

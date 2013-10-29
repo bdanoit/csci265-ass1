@@ -1,0 +1,27 @@
+$|=1;
+use strict;
+use warnings;
+
+$SIG{__DIE__} =sub { };
+
+include(../../lib/cew/bin/cew.pl)
+
+use lib '../';
+use lib '../../lib';
+
+use strict;
+use warnings;
+use Try::Tiny;
+use parse::request;
+use exc::exception;
+
+
+my $params = parse::request->new();
+
+
+cew_Variables
+
+#Check for invalid argument count
+cew_Ncase($params->parse("hello|123456|upload|12"),$params->user, "HELLO", ne)
+   
+cew_Summary
