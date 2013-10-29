@@ -1,3 +1,30 @@
+#================================================================--
+# Design Unit  : cew testbench for client parameter parsing
+#
+# File Name    : tb.cew
+#
+# Purpose      : unit testing
+#
+# Note         :
+#
+# Limitations  :
+#
+# Errors       : none known
+#
+# Modules      : parseClientRequest::parse
+#
+# Dependences  : cew
+#
+# Author       : Justin Waterhouse, Vancouver Island University
+#
+# System       : Perl (Linux)
+#
+#------------------------------------------------------------------
+# Revision List
+# Version      Author  Date    Changes
+# 1.0          JW      Oct 28  New version
+#================================================================--
+
 $SIG{__DIE__} =sub { };
 
 include(../../lib/cew/bin/cew.pl)
@@ -24,6 +51,9 @@ cew_Variables
 
 #Valid Entry - Alpha Alpha
 cew_Ncase($userRequest->parseString("-u User -p Password -uf FileName"),$userRequest->UserName,'User',ne)
+
+#Valid Entry - Alpha Alpha
+cew_Ncase($userRequest->parseString("-u User -p Password -df FileName"),$userRequest->UserName,'User',ne)
 
 #Valid Entry - Alpha AlphaNum
 $userRequest = parseClientRequest::parse->new();
