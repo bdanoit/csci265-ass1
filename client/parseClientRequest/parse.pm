@@ -13,10 +13,10 @@ use warnings;
 sub new{
     my $class = shift @_;
     my $self = {
-        UserName=>'',
-        Password=>'',
-        Request=>'',
-        FileName=>''
+        UserName=>undef,
+        Password=>undef,
+        Request=>undef,
+        FileName=>undef
     };
 
     bless ($self, $class);
@@ -32,8 +32,7 @@ sub parseString{
    while ($string =~ /-([^-]+)/g)
    {
       
-      (my $Command, my  $Data) = split(/ /i, $1, 2);
-      #User Name
+      (my $Command, my  $Data) = split(/ /, $1, 2);
       if (defined($Data)&&!($Data eq ''))
       {
          $Count++;
