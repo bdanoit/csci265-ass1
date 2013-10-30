@@ -44,7 +44,7 @@ sub parse{
         die exc::exception->new("invalid_user_name") unless ($user =~ /^[A-Z0-9]{4,16}$/);
         die exc::exception->new("invalid_password") unless ($password =~ /^[a-z0-9]{4,12}$/i);
         die exc::exception->new("invalid_type") unless ($type =~ /^(DOWNLOAD|UPLOAD)$/);
-        die exc::exception->new("invalid_lines") unless ($lines =~ /^[0-9]+$/i);
+        die exc::exception->new("invalid_lines") unless (!defined($lines) || $lines =~ /^[0-9]+$/i);
         $self->{'user'} = $user;
         $self->{'password'} = $password;
         $self->{'type'} = $type;

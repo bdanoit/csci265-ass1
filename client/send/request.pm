@@ -30,15 +30,14 @@ sub new{
       'file'=>$file
    };
     
-   die exc::exception->new('file_does_not_exist') unless (-e $file);
    
    switch($type){
       case 'UPLOAD'{
+         die exc::exception->new('file_does_not_exist') unless (-e $file);
          my $lines = func::file->countLines($file);
          $self->{'query'} = join("|", $user,$password, $type, $lines);
       }
       case 'DOWNLOAD'{
-         my $lines = func::file->countLines($file);
          $self->{'query'} = join("|", $user,$password, $type);
       }
    }
