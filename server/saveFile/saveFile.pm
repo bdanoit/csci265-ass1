@@ -77,7 +77,7 @@ sub saveFileToDir {
       }
       else
       {
-         die exc::exception->new("can't_open_file");
+         die exc::exception->new("can_not_open_file");
       }
       if(move ($tempfile, $datafile))
       {

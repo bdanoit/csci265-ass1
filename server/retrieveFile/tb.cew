@@ -33,7 +33,7 @@ use lib '../';
 use lib '../../lib';
 use exc::exception;
 use Try::Tiny;
-use retrievefile::retrieveFile;
+use retrieveFile::retrieveFile;
 
 
 include(../../lib/cew/bin/cew.pl)
@@ -47,7 +47,7 @@ my $stream;
 my $testRetrieveFile;
 
 #Create a test file for the module testing
-open(my $file, ">","upload/$user.dat");
+open(my $file, ">","../saveFile/upload/$user.dat");
 print $file "foo\n";
 close($file);
 
@@ -63,12 +63,33 @@ cew_Variables
 
 #checks if a file can be save if the right parameters are given
 open($stream, ">","test.tmp");
-$testRetrieveFile = retrieveFile->new($user,$stream);
+$testRetrieveFile = retrieveFile::retrieveFile->new($user,$stream);
 cew_Ncase(, $testRetrieveFile->retrieveFileFromDir(), 1, !=)
 close($stream);
+
+#checks if the right line count is give
+open($stream, ">","test.tmp");
+$testRetrieveFile = retrieveFile::retrieveFile->new($user,$stream);
+cew_Ncase(, $testRetrieveFile->getLineCount(), 1, !=)
+close($stream);
+ 
 
 #++++++++++++++++++++++++++++
 #ECASES
 #++++++++++++++++++++++++++++
 
+#Make sure an exception is throw when the wrong parameters are given
+cew_Ecase($testRetrieveFile = retrieveFile::retrieveFile->new(), "username_not_defined")
+cew_Ecase($testRetrieveFile = retrieveFile::retrieveFile->new($user), "socket_not_defined")
+
+#Make sure an exception is throw when the user has no file
+open($stream, ">","test.tmp");
+$testRetrieveFile = retrieveFile::retrieveFile->new("qwertuiop",$stream);
+cew_Ecase( $testRetrieveFile->retrieveFileFromDir(),"no_file_exist_for_user" )
+cew_Ecase( $testRetrieveFile->getLineCount(),"no_file_exist_for_user" )
+close($stream);
+
+
+#Remove module test file
+unlink "test.tmp" if -e "test.tmp";
 cew_Summary
