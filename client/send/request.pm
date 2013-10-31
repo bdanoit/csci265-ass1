@@ -3,10 +3,9 @@ package parseClientRequest::request;
 #Justin Waterhouse CSCI 265
 use lib '../../lib';
 #Modules
-use IO::Socket;
 use strict;
-use exc::exception;
 use warnings;
+use exc::exception;
 use func::file;
 use Switch;
 
@@ -49,12 +48,7 @@ sub new{
 
 sub sendRequest{
    my $self = shift @_;
-   my $sock = new IO::Socket::INET (
-      PeerAddr => 'localhost',
-      PeerPort => '9337',
-      Proto => 'tcp'
-   );
-   die exc::exception->new('cannot_connect_to_server') unless $sock;
+   my $sock = shift @_;
    print $sock $self->{'query'}."\n";
    
    my $file = $self->{'file'};

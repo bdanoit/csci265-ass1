@@ -9,7 +9,7 @@ use IO::Socket;
 use func::file;
 use exc::exception;
 use Try::Tiny;
-use user::user2;
+use user::user;
 use saveFile::saveFile;
 use retrieveFile::retrieveFile;
 use parse::request;
@@ -36,10 +36,10 @@ while (my $client = $sock->accept()) {
             my $request = parse::request->new();
             print "\t$child> $query";
             $request->parse($query);
-            my $user = user::user2->new($request->user, $request->password);
+            my $user = user::user->new($request->user, $request->password);
             switch($request->type){
                 case 'UPLOAD'{
-                    my $upload = saveFile::saveFile->new($user->name, $client, $request->lines);
+                    my $upload = saveFile::saveFile->new($user->username, $client, $request->lines);
                     $upload->saveFileToDir();
                 }
                 case 'DOWNLOAD'{
