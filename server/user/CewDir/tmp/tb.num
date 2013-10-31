@@ -1,0 +1,68 @@
+$|=1;
+use strict;
+use warnings;
+
+use lib '../../lib';
+use exc::exception;
+use Try::Tiny;
+
+include(CewDir/bin/cew.pl)
+use lib '../';
+use user::user;
+use storage::storage;
+
+
+cew_Variables
+
+sub load {
+   my $s=shift @_;
+   my $n=shift @_;
+   
+   for (my $i=0; $i<$n; $i++) {
+      $s->push(($i+1)*10);
+   }
+}
+
+my $storage0=storage::storage->new();
+my $user0;
+my $user1;
+#############
+# Normal Case
+#############
+
+$storage0->deleteUser("jeff234");
+$storage0->addUser("jeff234");
+my @passwords0 = ("as4df");
+$storage0->addPasswordsByUser("jeff234", \@passwords0); 
+cew_Ncase(37,$user0 = user::user->new("jeff234", "as4df"), $user0->username(), "jeff234", ne);
+cew_Ecase(38,$user0 = user::user->new("jeff234", "as4df"), "invalid_password");
+
+
+$storage0->deleteUser("1234");
+$storage0->addUser("1234");
+my @passwords1 = ("9876");
+$storage0->addPasswordsByUser("1234", \@passwords1); 
+cew_Ncase(45,$user1 = user::user->new("1234", "9876"), $user1->username(), "1234", ne);
+cew_Ecase(46,$user1 = user::user->new("1234", "9876"), "invalid_password");
+
+
+################
+#Exception Cases
+################
+
+cew_Ecase(53,$user0 = user::user->new("jeff23", "as4df"), "invalid_username");
+cew_Ecase(54,$user0 = user::user->new("jeff234", "jlk"), "invalid_password");
+cew_Ecase(55,$user0 = user::user->new("", "as4df"), "invalid_username");
+cew_Ecase(56,$user0 = user::user->new("jeff234", ""), "invalid_password");
+cew_Ecase(57,$user0 = user::user->new("", ""), "invalid_username");
+
+
+
+$storage0->deleteUser("1234");
+$storage0->deleteUser("jeff234");
+
+
+
+
+   
+cew_Summary

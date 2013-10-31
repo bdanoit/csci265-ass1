@@ -1,43 +1,32 @@
-package user;
-$|=1;
+package user::user;
 
+$|=1;
 
 use strict;
 use warnings;
-
-my $defaultName = "Peter";
-
-
-
-### creates a new user-object with default name "Peter"
-### if a name was passed as a parameter, it will be set
+use lib '../../lib';
+use storage::storage;
+use exc::exception;
 
 sub new {
-   my $class = shift @_;
-   my $parameter = shift @_;
+	my $class = shift @_;
+	my $username = shift@_;
+	my $password = shift@_;
+	my $self = {
+		username=>$username,
+		password=>$password
+	};
 
-   my $self = {
-	name => $defaultName,
-              };
+	my $storage = storage::storage->new();
 
-   if (defined($parameter)) {
-      $self -> {name} = $parameter;
-   }
-
-   bless ($self, $class);
-
-   return $self;
+	die exc::exception->new("invalid_username") unless $storage->userExists($username);
+	die exc::exception->new("invalid_password") unless $storage->passwordByUserExists($username, $password);
+	$storage->deletePasswordByUser($username, $password);
+	bless($self, $class);
 }
 
-sub printName {
-
-   my $reference = shift @_;
-   my $parameter = shift @_;
-
-   print "User's name is: $reference->{name} \n";
-
-   return 0;
-
+sub username {
+	my $self = shift @_;
+	return $self->{username};
 }
-
 1;
