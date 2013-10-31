@@ -14,7 +14,7 @@ $SIG{__DIE__} = sub{
 
 my $server = IO::Socket::INET->new(
     PeerAddr => 'localhost',
-    PeerPort => 1337,
+    PeerPort => 9337,
     Proto    => 'tcp'
 );
 
@@ -66,3 +66,9 @@ else{
     close FILE;
     print $server "|EOF|";
 }
+
+while(<$server>){
+    print $_;
+}
+
+close($server);

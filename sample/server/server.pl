@@ -4,7 +4,7 @@ use strict;
 
 my $sock = new IO::Socket::INET (
     LocalHost => '',
-    LocalPort => '1337',
+    LocalPort => '9337',
     Proto => 'tcp',
     Listen => 3,
     Reuse => 1
@@ -18,6 +18,8 @@ while (my $client = $sock->accept()) {
         my $request = <$client>;
         print "<Forked Request on Child\n";
         print "\t$request";
+        print $client "File stored", "\n";
+        print $client "Test", "\n";
         if($request =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)(?:\|([^\|]+))\n$/){
             my $username = $1;
             my $password = $2;

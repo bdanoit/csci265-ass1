@@ -53,18 +53,10 @@ sub sendRequest{
    
    my $file = $self->{'file'};
    my $handle;
-   switch($self->{'type'}){
-      case 'UPLOAD'{
-         open $handle, '<', $file or die exc::exception->new('could_not_open_file_for_reading');
-         while(defined (my $line = <$handle>)){
-               print $sock $line;
-         }
-      }
-      case 'DOWNLOAD'{
-         open $handle, '>', $file or die exc::exception->new('could_not_open_file_for_writing');
-         while(defined <$sock>){
-            print $handle $_;
-         }
+   if($self->{'type'} eq 'UPLOAD'){
+      open $handle, '<', $file or die exc::exception->new('could_not_open_file_for_reading');
+      while(defined (my $line = <$handle>)){
+         print $sock $line;
       }
    }
    return 1;

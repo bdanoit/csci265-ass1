@@ -64,10 +64,11 @@ sub saveFileToDir {
       if (open(my $handle, ">",$tempfile))
       {
          my $sock = $self->{sockets};
-         while(<$sock>)
+         while(defined(my $line = <$sock>))
          {
-            print $handle $_;
+            print $handle $line;
             $countline++;
+            if($countline == $self->{linecount}){ last; }
          }
          if( $countline != $self->{linecount})
          {
@@ -77,18 +78,15 @@ sub saveFileToDir {
       }
       else
       {
-         die exc::exception->new("can_not_open_file");
+         die exc::exception->new("could_not_open_file");
       }
-      if(move ($tempfile, $datafile))
-      {
-         return 1;
-      } 
-      else
+      if(!move ($tempfile, $datafile))
       {
          unlink $tempfile if -e $tempfile;
          die exc::exception->new("could_not_move_file");
       }
       
    }
+   return 1;
    
 }

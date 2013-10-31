@@ -1,0 +1,37 @@
+$|=1;
+use strict;
+use warnings;
+
+$SIG{__DIE__} =sub { };
+
+include(../../lib/cew/bin/cew.pl)
+
+use lib '../';
+use lib '../../lib';
+
+use strict;
+use warnings;
+use Try::Tiny;
+use response::response;
+use exc::exception;
+
+my $handle;
+open($handle, '>', 'source.tmp');
+print $handle "HELLO\n";
+print $handle "WORLD\n";
+open($handle, '<', 'source.tmp');
+
+my $obj;
+
+cew_Variables
+
+
+cew_Ecase($obj = response::response->new(),'response_no_socket_provided')
+cew_Ncase($obj = response::response->new($handle),0,0,!=)
+
+cew_Ncase(,$obj->process('SUCCESS|'), 1, !=)
+cew_Ncase(,$obj->process('SUCCESS'), 1, !=)
+cew_Ncase(,$obj->process('SUCCESS|1', 'test.tmp'), 1, !=)
+
+cew_Summary
+

@@ -13,6 +13,7 @@ use user::user;
 use saveFile::saveFile;
 use retrieveFile::retrieveFile;
 use parse::request;
+use reply::reply;
 use Switch;
 
 my $sock = new IO::Socket::INET (
@@ -37,14 +38,22 @@ while (my $client = $sock->accept()) {
             print "\t$child> $query";
             $request->parse($query);
             my $user = user::user->new($request->user, $request->password);
+            my $reply = reply::reply->new($client);
             switch($request->type){
                 case 'UPLOAD'{
                     my $upload = saveFile::saveFile->new($user->username, $client, $request->lines);
+                    print "\t$child> Upload started\n";
                     $upload->saveFileToDir();
+                    $reply->send('SUCCESS');
+                    #print $sock 'SUCCESS', "\n";
+                    print "\t$child> Upload finished\n";
                 }
                 case 'DOWNLOAD'{
-                    #my $download = retrieveFile::retrieveFile->new($user->name, $client);
-                    #$download->retrieveFileFromDir();
+                    print "\t$child> DOWNLOAD STARTED\n";
+                    my $retrieve = retrieveFile::retrieveFile->new($user->username, $client);
+                    $reply->send('SUCCESS', $retrieve->getLineCount());
+                    #print $sock 'SUCCESS|2', "\n";
+                    $retrieve->retrieveFileFromDir();
                 }
             }
         }
@@ -53,6 +62,7 @@ while (my $client = $sock->accept()) {
             if(ref($ex) eq "exc::exception"){
                 my $exc_name = $ex->get_exc_name();
                 print "\t$child> $exc_name\n";
+                print $client "ERROR|$exc_name";
             }
             else{
                 print "\t$child> Unknown Exception: $ex\n";

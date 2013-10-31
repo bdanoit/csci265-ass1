@@ -1,0 +1,43 @@
+$|=1;
+use strict;
+use warnings;
+
+$SIG{__DIE__} =sub { };
+
+include(../../lib/cew/bin/cew.pl)
+
+use lib '../';
+use lib '../../lib';
+
+use strict;
+use warnings;
+use Try::Tiny;
+use reply::reply;
+use exc::exception;
+use IO::Socket;
+
+my $sock = new IO::Socket::INET (
+    PeerAddr => 'localhost',
+    PeerPort => '9337',
+    Proto => 'tcp'
+);
+die 'cannot_connect_to_server' unless $sock;
+
+my $reply;
+
+cew_Variables
+
+
+cew_Ecase($reply = reply::reply->new(),'reply_invalid_socket_provided')
+cew_Ncase($reply = reply::reply->new($sock),0,0,!=)
+
+cew_Ecase($reply->send('ERR'), 'reply_invalid_type')
+cew_Ecase($reply->send('ERROR'), 'reply_error_requires_value')
+cew_Ncase(,$reply->send('ERROR', 'dumb_error'), 1, !=)
+cew_Ncase(,$reply->send('SUCCESS'), 1, !=)
+cew_Ecase($reply->send('SUCCESS', 'hi'), 'reply_success_invalid_linecount')
+cew_Ncase(,$reply->send('SUCCESS', 20), 1, !=)
+
+cew_Summary
+
+close($sock);

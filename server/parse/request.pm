@@ -36,7 +36,7 @@ sub new{
 sub parse{
     my $self = shift @_;
     my $args = shift @_;
-    if($args =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)(?:\|([^\|]+))?\n?$/){
+    if($args =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)(?:\|([^\|]+))?\n$/){
         my $user = uc($1);
         my $password = $2;
         my $type = uc($3);

@@ -7,16 +7,26 @@ use lib '../lib/';
 
 use strict;
 use warnings;
+use Switch;
 use Try::Tiny;
 use parseClientRequest::parse;
 use send::request;
+use response::response;
 use exc::exception;
+use IO::Socket;
 
 my $parameters = join(' ', @ARGV);
 
 
 try
 {
+    my $sock = new IO::Socket::INET (
+        PeerAddr => 'localhost',
+        PeerPort => '9337',
+        Proto => 'tcp'
+    );
+    die exc::exception->new('cannot_connect_to_server') unless $sock;
+   
     #Validate user Request
     my $userRequest = parseClientRequest::parse->new();
     $userRequest->parseString($parameters);
@@ -24,12 +34,25 @@ try
     my $UserPassword = $userRequest->Password;
     my $Request = $userRequest->Request;
     my $FileName = $userRequest->FileName;
+    
     #Format and send Request
     my $request = parseClientRequest::request->new($UserName,$UserPassword,$Request,$FileName);
-    if($request->sendRequest()){
-        print "Your request was sent\n";
+    $request->sendRequest($sock);
+    
+    #Receive response
+    my $response = response::response->new($sock);
+    switch($Request){
+        case 'UPLOAD'{
+            $response->process();
+        }
+        case 'DOWNLOAD'{
+            $response->process($FileName);
+        }
     }
-}   
+    my $message = $response->message();
+    print $message if defined($message);
+    
+}
 catch
 {
     my $ex = $_;
