@@ -1,3 +1,30 @@
+#================================================================--
+# Design Unit  : cew testbench for user
+#
+# File Name    : tb.cew
+#
+# Purpose      : unit testing
+#
+# Note         :
+#
+# Limitations  :
+#
+# Errors       : none known
+#
+# Modules      : user::user
+#
+# Dependences  : cew
+#
+# Author       : John Tribe, Vancouver Island University
+#
+# System       : Perl (Linux)
+#
+#------------------------------------------------------------------
+# Revision List
+# Version      Author  Date    Changes
+# 1.0          JT      Oct 28  New version
+#================================================================--
+
 $|=1;
 use strict;
 use warnings;
