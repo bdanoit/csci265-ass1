@@ -6,7 +6,6 @@ $|=1;
 use strict;
 use lib '../../lib';
 use exc::exception;
-use func::file;
 use Digest::MD5 qw{md5_hex};
 
 sub new {
@@ -76,13 +75,11 @@ sub retrieveFileFromDir {
    for my $line (@$data){
       print $sock $line;
    }
+   return 1;
 }
 
 sub getLineCount {
    my $self = shift @_;
-   my $path = __FILE__;
-   $path =~ s/[^\/]+$//;
-   my $datafile = $path."../saveFile/upload/".$self->{username}.".dat";
-   die exc::exception->new("no_file_exist_for_user") unless (-e $datafile);
-   return func::file->countLines($datafile);
+   my $data = $self->{data};
+   return scalar @$data;;
 }
