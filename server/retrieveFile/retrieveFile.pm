@@ -80,9 +80,6 @@ sub retrieveFileFromDir {
 
 sub getLineCount {
    my $self = shift @_;
-   my $path = __FILE__;
-   $path =~ s/[^\/]+$//;
-   my $datafile = $path."../saveFile/upload/".$self->{username}.".dat";
-   die exc::exception->new("no_file_exist_for_user") unless (-e $datafile);
-   return func::file->countLines($datafile);
+   my $data = $self->{data};
+   return scalar @$data;
 }

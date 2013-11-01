@@ -37,7 +37,7 @@ sub process{
     my $file = shift @_;
     
     my $query = <$sock>;
-    chop $query;
+    $query =~ s/\n$//;
     
     if(!defined($query)){
         $self->{'message'} = "No response from server.\n";
@@ -51,7 +51,7 @@ sub process{
     }
     
     if($type eq 'SUCCESS' && !defined($value)){
-        $self->{'message'} = "Your request was successful.\n";
+        $self->{'message'} = "Your upload was successful.\n";
         return 1;
     }
     

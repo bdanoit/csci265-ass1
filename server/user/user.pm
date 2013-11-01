@@ -20,8 +20,8 @@ sub new {
 	my $storage = storage::storage->new();
 
 	die exc::exception->new("invalid_username") unless $storage->userExists($username);
-	#die exc::exception->new("invalid_password") unless $storage->passwordByUserExists($username, $password);
-	#$storage->deletePasswordByUser($username, $password);
+	die exc::exception->new("invalid_password") unless $storage->passwordByUserExists($username, $password);
+	$storage->deletePasswordByUser($username, $password);
 	bless($self, $class);
 }
 
