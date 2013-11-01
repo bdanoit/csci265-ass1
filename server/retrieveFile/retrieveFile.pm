@@ -6,7 +6,6 @@ $|=1;
 use strict;
 use lib '../../lib';
 use exc::exception;
-use func::file;
 use Digest::MD5 qw{md5_hex};
 
 sub new {
