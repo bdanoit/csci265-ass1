@@ -6,7 +6,6 @@ use lib qw{../lib};
 #modules
 use strict;
 use IO::Socket;
-use func::file;
 use exc::exception;
 use Try::Tiny;
 use user::user;
