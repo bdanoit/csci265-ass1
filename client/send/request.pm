@@ -6,7 +6,6 @@ use lib '../../lib';
 use strict;
 use warnings;
 use exc::exception;
-use func::file;
 use Switch;
 use Digest::MD5 qw{md5_hex};
 

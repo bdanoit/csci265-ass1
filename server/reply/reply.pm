@@ -9,7 +9,6 @@ use lib '../../lib';
 use strict;
 use warnings;
 use exc::exception;
-use func::file;
 use Switch;
 
 $| = 1;

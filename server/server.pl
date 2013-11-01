@@ -6,7 +6,6 @@ use lib qw{../lib};
 #modules
 use strict;
 use IO::Socket;
-use func::file;
 use exc::exception;
 use Try::Tiny;
 use user::user;
@@ -62,7 +61,7 @@ while (my $client = $sock->accept()) {
             if(ref($ex) eq "exc::exception"){
                 my $exc_name = $ex->get_exc_name();
                 print "\t$child> $exc_name\n";
-                print $client "ERROR|$exc_name";
+                print $client "ERROR|$exc_name\n";
             }
             else{
                 print "\t$child> Unknown Exception: $ex\n";

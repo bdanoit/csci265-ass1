@@ -81,5 +81,5 @@ sub retrieveFileFromDir {
 sub getLineCount {
    my $self = shift @_;
    my $data = $self->{data};
-   return scalar @$data;;
+   return scalar @$data;
 }
