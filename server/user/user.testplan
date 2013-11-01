@@ -1,0 +1,15 @@
+Normal Case
+        New
+                Alnum Name and Alnum Password
+                Numeric Name and Numeric Password
+        Username
+                Alnum Name
+                Numeric Name
+
+Exceptional Cases
+        Invalid Name
+        Invalid Password
+        Invalid Name and Password
+        Blank Name
+        Blank Password
+        Blank Name and Password

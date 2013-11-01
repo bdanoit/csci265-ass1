@@ -1,3 +1,5 @@
+#John Tribe csci265
+
 package user::user;
 
 $|=1;
