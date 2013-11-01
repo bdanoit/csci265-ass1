@@ -48,15 +48,18 @@ use exc::exception;
 my @users;
 my @passwords;
 my @test_passwords;
+my @bad_password = ('@@@');
 my $count;
 my $testuser = "TestUser";
-my $db = storage::storage->new();
-
+my $db;
 
 cew_Variables
 
+#Create instance
+cew_Ncase($db = storage::storage->new(),0,0,!=);
+
 #Check for invalid user name
-cew_Ecase($db->addUser($testuser.'@'), "invalid_user_name")
+cew_Ecase($db->addUser($testuser.'@'), "storage_invalid_user_name")
 
 #Make sure duplicate users are not allowed
 cew_Ecase($db->addUser($testuser);$db->addUser($testuser), "column id is not unique")
@@ -69,6 +72,7 @@ cew_Ncase(,$db->userExists($testuser),1,!=);
 
 #Add some passwords to non existant user
 cew_Ecase($db->addPasswordsByUser($testuser.'1234', \@test_passwords), "foreign key constraint failed")
+cew_Ecase($db->addPasswordsByUser($testuser, \@bad_password), "storage_invalid_password")
 
 #Add some passwords to test user
 undef @passwords;
@@ -79,7 +83,7 @@ cew_Ncase(,$db->passwordByUserExists($testuser, $test_passwords[2]),1,!=);
 
 #Add an invalid password to test user
 @test_passwords = ("pimp@");
-cew_Ecase($db->addPasswordsByUser($testuser, \@test_passwords),"invalid_password")
+cew_Ecase($db->addPasswordsByUser($testuser, \@test_passwords),"storage_invalid_password")
 
 #Remove a password and make sure count is set to 2
 undef @passwords;

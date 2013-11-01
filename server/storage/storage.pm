@@ -23,23 +23,35 @@ use DBD::SQLite;
 sub new{
     my $class= shift @_;
     my $path = __FILE__;
-    $path =~ s/[^\/]+$//;
+    $path =~ s/[^\/]+$//; #pwd
+    
     my $dbname = $path.'fsys.sqlite';
     my $self = {
         db=>undef
     };
 
+    bless ($self, $class);
+    
     my $db = DBI->connect("dbi:SQLite:dbname=$dbname","","") or $self->DBIException();
     
+    #turn on foreign key constraints
     my $fk = $db->do("PRAGMA foreign_keys = ON") or $self->DBIException();
+    
+    #load in sql if tables not present
+    my $exists = $db->selectrow_array("SELECT 1 FROM sqlite_master WHERE type='table' AND name='users';") or $self->DBIException();
+    if(!defined($exists)){
+        my $handle;
+        open $handle, "storage.sql" or die exc::exception('storage_sql_init_not_found');
+        while(defined(my $sql = <$handle>)){
+            my $stmt = $db->do($sql) or die $self->DBIException();
+        }
+    }
     
     #turn off automatic warning
     $db->{'PrintError'} = 0;
     $db->{'PrintWarn'} = 0;
     
     $self->{'db'} = $db;
-
-    bless ($self, $class);
     return $self;
 }
 
@@ -48,7 +60,7 @@ sub passwordsByUser{
     my $db = $self->{'db'};
     my $user = shift @_;
     my $list = shift @_; #reference to array
-    die exc::exception->new("bad_array_ref") unless ref($list);
+    die exc::exception->new("storage_bad_array_ref") unless ref($list);
     
     my $stmt = $db->prepare("select password from user_passwords where user_id = ?;") or $self->DBIException();
     my $result = $stmt->execute($user) or $self->DBIException();
@@ -101,7 +113,7 @@ sub addPasswordsByUser{
     my $db = $self->{'db'};
     my $user = shift @_;
     my $list = shift @_; #reference to array
-    die exc::exception->new("bad_array_ref") unless ref($list);
+    die exc::exception->new("storage_bad_array_ref") unless ref($list);
     
     return 0 unless $self->validateUser($user);
     
@@ -143,7 +155,7 @@ sub validateUser{
     my $self = shift @_;
     my $entry = shift @_;
     return 1 if ($entry =~ /^[a-z0-9_]{4,16}$/i);
-    die exc::exception->new("invalid_user_name");
+    die exc::exception->new("storage_invalid_user_name");
     return 0;
 }
 
@@ -151,7 +163,7 @@ sub validatePassword{
     my $self = shift @_;
     my $entry = shift @_;
     return 1 if ($entry =~ /^[a-z0-9_]{4,12}$/i);
-    die exc::exception->new("invalid_password");
+    die exc::exception->new("storage_invalid_password");
     return 0;
 }
 
