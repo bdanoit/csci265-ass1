@@ -8,3 +8,11 @@ Exceptions: If username is invalid throw exception
 
 Behaviour:  
 	    Verifies the username and password are correct before removing the password that was used from the database.
+
+
+Class Method username
+---------------------
+Input: none
+Exceptions: none
+Behaviour:
+	returns the username
