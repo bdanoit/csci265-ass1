@@ -1,0 +1,51 @@
+$|=1;
+use strict;
+use warnings;
+
+$SIG{__DIE__} =sub { };
+
+include(../../lib/cew/bin/cew.pl)
+
+use lib '../';
+use lib '../../lib';
+
+use strict;
+use warnings;
+use Try::Tiny;
+use send::request;
+use exc::exception;
+use Digest::MD5 qw{md5_hex};
+
+
+my $temp = 'test.tmp';
+my $temp2 = 'test2.tmp';
+my @data = ("hello\n","world\n","\n","ITS BRENT LOL\n");
+my $handle;
+open($handle, '>', $temp);
+foreach my $line (@data){
+    print $handle $line;
+}
+close $handle;
+open($handle, '>', $temp2);
+
+my $obj;
+
+cew_Variables
+
+
+cew_Ecase(send::request->new(),'request_user_not_defined')
+cew_Ecase(send::request->new('user'),'request_password_not_defined')
+cew_Ecase(send::request->new('user', 'pass'),'request_type_not_defined')
+cew_Ecase(send::request->new('user', 'pass', 'UPLOAD'),'request_file_not_defined')
+cew_Ecase(send::request->new('user', 'pass', 'UPLOAD', 'non_existant_file'), 'request_file_not_exists');
+
+cew_Ncase($obj = send::request->new('user', 'pass', 'DOWNLOAD', $temp),$obj->sendRequest($handle),1,!=)
+
+cew_Ncase($obj = send::request->new('user', 'pass', 'UPLOAD', $temp),1,1,ne)
+
+cew_Ncase(,$obj->sendRequest($handle),1,!=)
+
+cew_Summary
+
+close $handle;
+unlink ($temp, $temp2);

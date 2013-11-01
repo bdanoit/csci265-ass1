@@ -34,6 +34,7 @@ use lib '../../lib';
 use exc::exception;
 use Try::Tiny;
 use saveFile::saveFile;
+use Digest::MD5 qw{md5_hex};
 
 
 include(../../lib/cew/bin/cew.pl)
@@ -42,15 +43,17 @@ $SIG{__DIE__} =sub { };
 
 #test user 
 my $user = "asdfghjkl";
+unlink "upload/$user.tmp";
+my @data = ("foo\n", "foo1\n", "foo2\n");
 
 my $stream;
 my $testsaveFile;
 
 #Create a test file for the module testing
 open(my $file, ">","test.tmp");
-print $file "foo\n";
-print $file "foo1\n";
-print $file "foo2\n";
+for my $line (@data){
+    print $file $line;
+}
 close($file);
 
 
@@ -65,7 +68,7 @@ cew_Variables
 
 #checks if a file can be save if the right parameters are given
 open($stream, "<","test.tmp");
-$testsaveFile = saveFile::saveFile->new($user,$stream,3);
+cew_Ncase($testsaveFile = saveFile::saveFile->new($user,$stream,3,md5_hex(@data)),0,0,!=)
 cew_Ncase(, $testsaveFile->saveFileToDir(), 1, !=)
 close($stream);
 
@@ -75,9 +78,9 @@ close($stream);
 
 #Make sure when the wrong number of lines is give it throw exception 
 open($stream, "<","test.tmp");
-$testsaveFile = saveFile::saveFile->new($user,$stream,4);
+cew_Ncase($testsaveFile = saveFile::saveFile->new($user,$stream,4,md5_hex(@data)),0,0,!=)
 cew_Ecase($testsaveFile->saveFileToDir(), "corrupt_file")
-close($stream);
+#close($stream);
 
 #Make sure an exception is throw when the wrong parameters are given
 cew_Ecase($testsaveFile = saveFile::saveFile->new(), "username_not_defined")
@@ -86,6 +89,7 @@ cew_Ecase($testsaveFile = saveFile::saveFile->new($user), "socket_not_defined")
 
 open($stream, "<","test.tmp");
 cew_Ecase($testsaveFile = saveFile::saveFile->new($user,$stream), "linecount_not_defined")
+cew_Ecase($testsaveFile = saveFile::saveFile->new($user,$stream,3), "checksum_not_defined")
 close($stream);
 
 #Make sure an exception is throw when user file is locked
@@ -93,7 +97,7 @@ open($stream, ">","upload/$user.tmp");
 print $stream "foo\n";
 close($stream);
 open($stream, "<","test.tmp");
-$testsaveFile = saveFile::saveFile->new($user,$stream,3);
+cew_Ncase($testsaveFile = saveFile::saveFile->new($user,$stream,3,md5_hex(@data)),0,0,!=)
 cew_Ecase($testsaveFile->saveFileToDir(), "file_locked")
 close($stream);
 unlink "upload/$user.tmp" if -e "upload/$user.tmp";

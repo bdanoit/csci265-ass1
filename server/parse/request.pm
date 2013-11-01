@@ -36,21 +36,19 @@ sub new{
 sub parse{
     my $self = shift @_;
     my $args = shift @_;
-    if($args =~ /^([^\|]+)\|([^\|]+)\|([^\|]+)(?:\|([^\|]+))?\n$/){
-        my $user = uc($1);
-        my $password = $2;
-        my $type = uc($3);
-        my $lines = $4;
-        die exc::exception->new("invalid_user_name") unless ($user =~ /^[A-Z0-9]{4,16}$/);
-        die exc::exception->new("invalid_password") unless ($password =~ /^[a-z0-9]{4,12}$/i);
-        die exc::exception->new("invalid_type") unless ($type =~ /^(DOWNLOAD|UPLOAD)$/);
-        die exc::exception->new("invalid_lines") unless (!defined($lines) || $lines =~ /^[0-9]+$/i);
-        $self->{'user'} = $user;
-        $self->{'password'} = $password;
-        $self->{'type'} = $type;
-        $self->{'lines'} = $lines;
-    }
-    else{ die exc::exception->new("invalid_request"); }
+    (my $user, my $pass, my $type, my $lines, my $checksum) = split /\|/, $args;
+    
+    die exc::exception->new("request_invalid_user") unless (defined($user) && $user =~ /^[a-z0-9]{4,16}$/i);
+    die exc::exception->new("request_invalid_password") unless (defined($pass) && $pass =~ /^[a-z0-9]{4,12}$/i);
+    die exc::exception->new("request_invalid_type") unless (defined($type) && $type =~ /^(DOWNLOAD|UPLOAD)$/i);
+    die exc::exception->new("request_invalid_lines") unless (!defined($lines) || $lines =~ /^[0-9]+$/i);
+    die exc::exception->new("request_invalid_checksum") if (defined($lines) && !defined($checksum));
+    
+    $self->{'user'} = uc($user);
+    $self->{'password'} = $pass;
+    $self->{'type'} = uc($type);
+    $self->{'lines'} = $lines;
+    $self->{'checksum'} = $checksum;
     return 1;
 }
 
@@ -72,4 +70,9 @@ sub type{
 sub lines{
     my $self = shift @_;
     return $self->{'lines'};
+}
+
+sub checksum{
+    my $self = shift @_;
+    return $self->{'checksum'};
 }

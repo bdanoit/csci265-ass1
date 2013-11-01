@@ -32,28 +32,28 @@ while (my $client = $sock->accept()) {
     my $pid = fork();
     if($pid == 0){
         my $query = <$client>;
+        chop $query;
         print "Request Forked to Child ($child)\n";
         try{
             my $request = parse::request->new();
-            print "\t$child> $query";
+            print "\t$child> $query\n";
             $request->parse($query);
             my $user = user::user->new($request->user, $request->password);
             my $reply = reply::reply->new($client);
             switch($request->type){
                 case 'UPLOAD'{
-                    my $upload = saveFile::saveFile->new($user->username, $client, $request->lines);
+                    my $upload = saveFile::saveFile->new($user->username, $client, $request->lines, $request->checksum);
                     print "\t$child> Upload started\n";
                     $upload->saveFileToDir();
                     $reply->send('SUCCESS');
-                    #print $sock 'SUCCESS', "\n";
                     print "\t$child> Upload finished\n";
                 }
                 case 'DOWNLOAD'{
-                    print "\t$child> DOWNLOAD STARTED\n";
+                    print "\t$child> Retrieve started\n";
                     my $retrieve = retrieveFile::retrieveFile->new($user->username, $client);
-                    $reply->send('SUCCESS', $retrieve->getLineCount());
-                    #print $sock 'SUCCESS|2', "\n";
+                    $reply->send('SUCCESS', $retrieve->getLineCount, $retrieve->md5_checksum);
                     $retrieve->retrieveFileFromDir();
+                    print "\t$child> Retrieve sent\n";
                 }
             }
         }

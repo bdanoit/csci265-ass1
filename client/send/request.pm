@@ -1,6 +1,6 @@
-package parseClientRequest::request;
+package send::request;
 
-#Justin Waterhouse CSCI 265
+#Justin Waterhouse, Baleze Danoit CSCI 265
 use lib '../../lib';
 #Modules
 use strict;
@@ -8,57 +8,72 @@ use warnings;
 use exc::exception;
 use func::file;
 use Switch;
+use Digest::MD5 qw{md5_hex};
 
 $| = 1;
 
 sub new{
-   my $class = shift @_;
-   my $user = shift @_;
-   my $password = shift @_;
-   my $type = shift @_;
-   my $file = shift @_;
+    my $class = shift @_;
+    my $user = shift @_;
+    my $password = shift @_;
+    my $type = shift @_;
+    my $file = shift @_;
+     
+    die exc::exception->new('request_user_not_defined') unless ($user);
+    die exc::exception->new('request_password_not_defined') unless ($password);
+    die exc::exception->new('request_type_not_defined') unless ($type);
+    die exc::exception->new('request_file_not_defined') unless ($file);
     
-   die exc::exception->new('user_not_defined') unless ($user);
-   die exc::exception->new('password_not_defined') unless ($password);
-   die exc::exception->new('type_not_defined') unless ($type);
-   die exc::exception->new('file_not_defined') unless ($file);
+    my @data;
     
-   my $self = {
-      'query'=>undef,
-      'type'=>$type,
-      'file'=>$file
-   };
+    my $self = {
+        'user'=>$user,
+        'password'=>$password,
+        'type'=>$type,
+        'file'=>$file,
+        'data'=>\@data
+    };
     
-   
-   switch($type){
-      case 'UPLOAD'{
-         die exc::exception->new('file_does_not_exist') unless (-e $file);
-         my $lines = func::file->countLines($file);
-         $self->{'query'} = join("|", $user,$password, $type, $lines);
-      }
-      case 'DOWNLOAD'{
-         $self->{'query'} = join("|", $user,$password, $type);
-      }
-   }
+    switch($type){
+        case 'UPLOAD'{
+            die exc::exception->new('request_file_not_exists') unless (-e $file);
+            my $handle;
+            open $handle, '<', $file or die exc::exception->new('request_could_not_open_file_for_reading');
+            while(defined (my $line = <$handle>)){
+                push @data, $line;
+            }
+            close $handle;
+        }
+    }
 
 
-   bless ($self, $class);
-   return $self;
+    bless ($self, $class);
+    return $self;
 }
 
 sub sendRequest{
-   my $self = shift @_;
-   my $sock = shift @_;
-   print $sock $self->{'query'}."\n";
-   
-   my $file = $self->{'file'};
-   my $handle;
-   if($self->{'type'} eq 'UPLOAD'){
-      open $handle, '<', $file or die exc::exception->new('could_not_open_file_for_reading');
-      while(defined (my $line = <$handle>)){
-         print $sock $line;
-      }
-   }
-   return 1;
+    my $self = shift @_;
+    my $sock = shift @_;
+    my $data = $self->{'data'};
+    my $query;
+    
+    switch($self->{'type'}){
+        case 'UPLOAD'{
+            my $lines = scalar @$data;
+            my $checksum = md5_hex(@$data);
+            $query = join("|", $self->{'user'},$self->{'password'}, $self->{'type'}, $lines, $checksum);
+        }
+        case 'DOWNLOAD'{
+            $query = join("|", $self->{'user'},$self->{'password'}, $self->{'type'});
+        }
+    }
+    print $sock $query."\n";
+    
+    if($self->{'type'} eq 'UPLOAD'){
+        foreach my $line (@$data){
+            print $sock $line;
+        }
+    }
+    return 1;
 }
 

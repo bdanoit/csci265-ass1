@@ -1,7 +1,7 @@
 package saveFile::saveFile;
 #!/usr/bin/perl
 
-#Mandip Sangha CSCI 265
+#Mandip Sangha, Baleze Danoit CSCI 265
 
 $|=1;
 
@@ -10,12 +10,14 @@ use strict;
 use lib '../../lib';
 use exc::exception;
 use File::Copy 'move';
+use Digest::MD5 qw{md5_hex};
 
 sub new {
    my $class = shift @_;
    my $Usersname = shift @_;
    my $socket = shift @_;
    my $linecount = shift @_;
+   my $checksum = shift @_;
 
    my $self = {username => undef,
                sockets => undef,
@@ -42,6 +44,13 @@ sub new {
    {
       die exc::exception->new("linecount_not_defined");
    }
+   if(defined($checksum)){
+      $self->{checksum} = $checksum;
+   }
+   else
+   {
+      die exc::exception->new("checksum_not_defined");
+   }
 
    bless ($self, $class);
 
@@ -55,6 +64,7 @@ sub saveFileToDir {
    my $tempfile = $path."upload/".$self->{username}.".tmp";
    my $datafile = $path."upload/".$self->{username}.".dat";
    my $countline = 0;
+   my @data;
    if (-e $tempfile)
    {
       die exc::exception->new("file_locked");
@@ -67,11 +77,11 @@ sub saveFileToDir {
          while(defined(my $line = <$sock>))
          {
             print $handle $line;
+            push @data, $line;
             $countline++;
             if($countline == $self->{linecount}){ last; }
          }
-         if( $countline != $self->{linecount})
-         {
+         unless((md5_hex(@data) eq $self->{'checksum'}) && ($countline == $self->{'linecount'})){
             unlink $tempfile if -e $tempfile;
             die exc::exception->new("corrupt_file");
          }

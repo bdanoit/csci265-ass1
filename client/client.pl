@@ -36,7 +36,7 @@ try
     my $FileName = $userRequest->FileName;
     
     #Format and send Request
-    my $request = parseClientRequest::request->new($UserName,$UserPassword,$Request,$FileName);
+    my $request = send::request->new($UserName,$UserPassword,$Request,$FileName);
     $request->sendRequest($sock);
     
     #Receive response
