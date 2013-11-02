@@ -1,16 +1,13 @@
 package send::request;
-
 #Justin Waterhouse, Baleze Danoit CSCI 265
 use lib '../../lib';
 #Modules
 use strict;
 use warnings;
 use exc::exception;
-use Switch;
 use Digest::MD5 qw{md5_hex};
 
 $| = 1;
-
 sub new{
     my $class = shift @_;
     my $user = shift @_;
@@ -33,18 +30,15 @@ sub new{
         'data'=>\@data
     };
     
-    switch($type){
-        case 'UPLOAD'{
-            die exc::exception->new('request_file_not_exists') unless (-e $file);
-            my $handle;
-            open $handle, '<', $file or die exc::exception->new('request_could_not_open_file_for_reading');
-            while(defined (my $line = <$handle>)){
-                push @data, $line;
-            }
-            close $handle;
+    if($type == "UPLOAD"){
+        die exc::exception->new('request_file_not_exists') unless (-e $file);
+        my $handle;
+        open $handle, '<', $file;
+        while(defined (my $line = <$handle>)){
+            push @data, $line;
         }
+        close $handle;
     }
-
 
     bless ($self, $class);
     return $self;
@@ -56,16 +50,15 @@ sub sendRequest{
     my $data = $self->{'data'};
     my $query;
     
-    switch($self->{'type'}){
-        case 'UPLOAD'{
-            my $lines = scalar @$data;
-            my $checksum = md5_hex(@$data);
-            $query = join("|", $self->{'user'},$self->{'password'}, $self->{'type'}, $lines, $checksum);
-        }
-        case 'DOWNLOAD'{
-            $query = join("|", $self->{'user'},$self->{'password'}, $self->{'type'});
-        }
+    if($self->{'type'} == "UPLOAD"){
+        my $lines = scalar @$data;
+        my $checksum = md5_hex(@$data);
+        $query = join("|", $self->{'user'},$self->{'password'}, $self->{'type'}, $lines, $checksum);
     }
+    else{
+        $query = join("|", $self->{'user'},$self->{'password'}, $self->{'type'});
+    }
+    
     print $sock $query."\n";
     
     if($self->{'type'} eq 'UPLOAD'){
@@ -75,4 +68,4 @@ sub sendRequest{
     }
     return 1;
 }
-
+1;

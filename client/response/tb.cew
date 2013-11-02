@@ -14,24 +14,67 @@ use warnings;
 use Try::Tiny;
 use response::response;
 use exc::exception;
+use IPC::Open2;
+use Digest::MD5 qw{md5_hex};
 
-my $handle;
-open($handle, '>', 'source.tmp');
-print $handle "HELLO\n";
-print $handle "WORLD\n";
-open($handle, '<', 'source.tmp');
+my $reader, my $writer;
+my $pid = open2( $reader, $writer, "cat" );
+my @data = ("HELLO\n","WORLD\n");
 
 my $obj;
 
+my $test = "test.tmp";
+unlink $test;
+
 cew_Variables
 
-
 cew_Ecase($obj = response::response->new(),'response_no_socket_provided')
-cew_Ncase($obj = response::response->new($handle),0,0,!=)
 
-cew_Ncase(,$obj->process('SUCCESS|'), 1, !=)
-cew_Ncase(,$obj->process('SUCCESS'), 1, !=)
-cew_Ncase(,$obj->process('SUCCESS|1', 'test.tmp'), 1, !=)
+cew_Ncase($obj = response::response->new($reader),1, 1, !=)
+
+print $writer "wug\n";
+cew_Ecase($obj->process($test),'response_malformed')
+
+print $writer "SUCCESS|hi\n";
+cew_Ecase($obj->process($test),'response_invalid_line_count')
+
+print $writer "SUCCESS|1\n";
+cew_Ecase($obj->process($test),'response_checksum_not_provided')
+
+print $writer "SUCCESS|1|checksum\n";
+cew_Ecase($obj->process(),'response_path_not_provided')
+
+print $writer "SUCCESS|2|checksum\n";#,md5_hex(@data)
+for my $line (@data){ print $writer $line; }
+cew_Ecase($obj->process($test),'response_corrupt_file')
+close $reader; close $writer;
+
+#cew_Ecase($obj->process($test),'response_cannot_open_file
+
+open2( $reader, $writer, "cat" );
+print $writer "SUCCESS\n";
+cew_Ncase($obj = response::response->new($reader),$obj->process($test), 1, !=)
+close $reader; close $writer;
+
+open2( $reader, $writer, "cat" );
+print $writer "ERROR|server_exception\n";
+cew_Ncase($obj = response::response->new($reader),$obj->process($test), 1, !=)
+close $reader; close $writer;
+
+open2( $reader, $writer, "cat" );
+print $writer "SUCCESS|2|",md5_hex(@data),"\n";
+for my $line (@data){ print $writer $line; }
+cew_Ncase($obj = response::response->new($reader),$obj->process($test), 1, !=)
+close $reader; close $writer;
+
+#open2( $reader, $writer, "cat" );
+#print $writer "SUCCESS|2|",md5_hex(@data),"\n";
+#for my $line (@data){ print $writer $line; }
+#cew_Ncase($obj = response::response->new($reader, 1);$obj->message;,$obj->process($test), 1, !=)
+#close $reader; close $writer;
+
+cew_Ecase($obj->process($test),'response_not_received')
 
 cew_Summary
 
+unlink $test;
