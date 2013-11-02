@@ -26,6 +26,10 @@ cew_Ecase($params->parse("hello"),"request_invalid_password")
 cew_Ecase($params->parse("hello|123456"),"request_invalid_type")
 cew_Ecase($params->parse("hello|123456|upload|lol"),"request_invalid_lines")
 cew_Ecase($params->parse("hello|123456|upload|12"),"request_invalid_checksum")
-cew_Ncase($params->parse("hello|123456|upload|12|checksum"),$params->checksum, "checksum", ne)
+cew_Ncase($params->parse("hello|123456|upload|12|checksum"),$params->user, "HELLO", ne)
+cew_Ncase(,$params->password, "123456", ne)
+cew_Ncase(,$params->type, "UPLOAD", ne)
+cew_Ncase(,$params->lines, "12", ne)
+cew_Ncase(,$params->checksum, "checksum", ne)
    
 cew_Summary

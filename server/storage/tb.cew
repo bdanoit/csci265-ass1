@@ -62,7 +62,7 @@ cew_Ncase($db = storage::storage->new(),0,0,!=);
 cew_Ecase($db->addUser($testuser.'@'), "storage_invalid_user_name")
 
 #Make sure duplicate users are not allowed
-cew_Ecase($db->addUser($testuser);$db->addUser($testuser), "column id is not unique")
+cew_Ecase($db->addUser($testuser);$db->addUser($testuser), "storage_user_exists")
 
 #Make sure newly added user exists
 cew_Ncase(,$db->userExists($testuser),1,!=);
@@ -71,7 +71,7 @@ cew_Ncase(,$db->userExists($testuser),1,!=);
 @test_passwords = ("pimp","shizzle","barmitzvah");
 
 #Add some passwords to non existant user
-cew_Ecase($db->addPasswordsByUser($testuser.'1234', \@test_passwords), "foreign key constraint failed")
+cew_Ecase($db->addPasswordsByUser($testuser.'1234', \@test_passwords), "storage_user_not_exist")
 cew_Ecase($db->addPasswordsByUser($testuser, \@bad_password), "storage_invalid_password")
 
 #Add some passwords to test user
