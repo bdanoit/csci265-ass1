@@ -2,3 +2,4 @@
 tb.pl
 *.tmp
 *.cover
+cover_db/

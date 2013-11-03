@@ -17,7 +17,7 @@ sub new{
     my $class = shift @_;
     my $sock = shift @_;
     
-    die exc::exception->new('reply_invalid_socket_provided') unless (defined $sock);
+    die exc::exception->new('reply_no_socket_provided') unless (defined $sock);
    
     my $self = {
         'sock'=>$sock
@@ -36,17 +36,18 @@ sub send{
     my $query;
     
     die exc::exception->new('reply_invalid_type') unless ($type =~ /^(?:ERROR|SUCCESS)$/);
-    switch($type){
-        case 'ERROR'{
-            die exc::exception->new('reply_error_requires_value') unless defined($value);
+    if($type eq 'ERROR'){
+            die exc::exception->new('reply_error_requires_value') unless defined $value;
             $query = join('|', ($type));
+    }
+    else{
+        die exc::exception->new('reply_success_invalid_linecount') if (defined $value && $value !~ /^[0-9]+$/);
+        die exc::exception->new('reply_success_checksum_required') if (defined $value && !defined $checksum);
+        if(defined $value && defined $checksum){
+            $query = join('|', ($type, $value, $checksum));
         }
-        case 'SUCCESS'{
-            die exc::exception->new('reply_success_invalid_linecount') unless (!defined($value) || ($value =~ /^[a-z0-9]+$/));
-            if(!defined($value)){
-                $query = join('|', ($type));
-            }
-            else{ $query = join('|', ($type, $value, $checksum)); }
+        else{
+            $query = join('|', ($type));
         }
     }
     

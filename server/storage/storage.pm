@@ -170,10 +170,14 @@ sub validatePassword{
 sub DBIException{
     my $self = shift @_;
     switch($DBI::err){
-        case undef{}
-        case 0{}
+        case undef{ return 0 }
+        case 0{ return 0 }
         default{
-            die exc::exception->new($DBI::errstr);
+            switch($DBI::errstr){
+                case 'column id is not unique'{ die exc::exception->new("storage_user_exists"); }
+                case 'foreign key constraint failed'{ die exc::exception->new("storage_user_not_exist"); }
+                default{ die exc::exception->new($DBI::errstr); }
+            }
         }
     }
 }
