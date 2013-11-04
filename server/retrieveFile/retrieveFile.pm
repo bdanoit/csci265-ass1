@@ -44,7 +44,7 @@ sub new {
    if(-e $datafile)
    {
 
-      if (-s $datafile < 5000000)
+      if (-s $datafile < 5*(1024)*(1024))
       {
          if (open (my $handle, '<', $datafile))
          {
