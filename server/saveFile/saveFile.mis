@@ -2,23 +2,28 @@ saveFile Specification
 
 Class Method new
 ----------------
-Inputs: Username, socket, linecount
+Inputs: Username, socket, linecount, checksum
+Assumtion: The retrieveFile's instance is set right
 Exceptions: If username not defined
             If socket not defined
-	    If linecount not defined
+	         If linecount not defined
+            If checksum not defined
 Behaviour:
 	Create a savefile instance
-		username		#instance string for storing username
+		username		   #instance string for storing username
 		sockets			#instance for socket
 		linecount 		#instance int for number of line in file
+      checksum       #instance for hold the incoming file md5 hash-sum
 
 Class Method saveFileToDir
 --------------------------
 Inputs: /
+Assumtion: The retrieveFile's instance is set right
 Exceptions: If file is locked
 	         If file can't be opened
-	         If file is corrupted
+            If file is line count or md5 hash-sum is not the same
+            If the temp file can't be move to the actual data file
 Behaviour:
 	Reads from socket line by line to a temp file
 		and then moves the temp file to the right spot
-		and returns "successful" if file was save
+		and returns "1" if file was save

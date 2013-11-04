@@ -21,7 +21,8 @@ sub new {
 
    my $self = {username => undef,
                sockets => undef,
-               linecount => undef};
+               linecount => undef,
+               checksum => undef};
 
    if(defined($Usersname)){
       $self->{username} = $Usersname;

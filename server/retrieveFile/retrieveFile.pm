@@ -1,6 +1,8 @@
 package retrieveFile::retrieveFile;
 #!/usr/bin/perl
 
+# Mandip Sangha CSCI 265
+
 $|=1;
 
 use strict;
@@ -41,15 +43,23 @@ sub new {
    my $datafile = $path."../saveFile/upload/".$self->{username}.".dat";
    if(-e $datafile)
    {
-      if (open (my $handle, '<', $datafile))
+
+      if (-s $datafile < 5000000)
       {
-         while(defined (my $line = <$handle>)){
-            push @data, $line;
+         if (open (my $handle, '<', $datafile))
+         {
+            while(defined (my $line = <$handle>)){
+               push @data, $line;
+            }
+         }
+         else
+         {
+            die exc::exception->new("can_not_find_file");
          }
       }
-      else
+      else 
       {
-         die exc::exception->new("can_not_find_file");
+         die exc::exception->new("file_size_to_big");
       }
    }
    else

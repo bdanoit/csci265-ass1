@@ -41,8 +41,9 @@ include(../../lib/cew/bin/cew.pl)
 
 $SIG{__DIE__} =sub { };
 
-#test user 
+#test users 
 my $user = "asdfghjkl";
+my $user1 = "asdfghjklq";
 
 my $stream;
 my $testRetrieveFile;
@@ -50,6 +51,14 @@ my $testRetrieveFile;
 #Create a test file for the module testing
 open(my $file, ">","../saveFile/upload/$user.dat");
 print $file "foo\n";
+close($file);
+
+#Create a test file for the module testing with file size over 5mb
+open(my $file, ">","../saveFile/upload/$user1.dat");
+   for (my $i =0; $i != 1500000; $i++)
+   {
+      print $file "foo\n";
+   }
 close($file);
 
 #gets the MD5 hash sum for the file
@@ -83,7 +92,7 @@ close($stream);
 #checks if the right line count is give
 open($stream, ">","test.tmp");
 $testRetrieveFile = retrieveFile::retrieveFile->new($user,$stream);
-cew_Ncase(, $testRetrieveFile->md5_checksum(), md5_hex(@data), !=)
+cew_Ncase(, $testRetrieveFile->md5_checksum(), md5_hex(@data), ne)
 close($stream);
  
 
@@ -100,7 +109,13 @@ open($stream, ">","test.tmp");
 cew_Ecase( $testRetrieveFile = retrieveFile::retrieveFile->new("qwertuiop",$stream),"no_file_exist_for_user" )
 close($stream);
 
+#Make sure an exception is throw when the user's file size is over 5mb
+open($stream, ">","test.tmp");
+cew_Ecase(retrieveFile::retrieveFile->new($user1,$stream),"file_size_to_big")
+close($stream);
 
 #Remove module test file
 unlink "test.tmp" if -e "test.tmp";
+unlink "../saveFile/upload/$user.dat" if -e "../saveFile/upload/$user.dat";
+unlink "../saveFile/upload/$user1.dat" if -e "../saveFile/upload/$user1.dat";
 cew_Summary
