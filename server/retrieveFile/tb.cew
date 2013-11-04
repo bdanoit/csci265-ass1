@@ -89,7 +89,7 @@ $testRetrieveFile = retrieveFile::retrieveFile->new($user,$stream);
 cew_Ncase(, $testRetrieveFile->getLineCount(), 1, !=)
 close($stream);
 
-#checks if the right line count is give
+#checks if the right md5 hash-sum is give
 open($stream, ">","test.tmp");
 $testRetrieveFile = retrieveFile::retrieveFile->new($user,$stream);
 cew_Ncase(, $testRetrieveFile->md5_checksum(), md5_hex(@data), ne)

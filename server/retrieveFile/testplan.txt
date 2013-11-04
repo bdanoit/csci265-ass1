@@ -1,0 +1,27 @@
+retrieveFile Specification
+
+Case1
+++++++++++++++++++++++
+checks if a file can be save if the right parameters are given
+
+Case2
+++++++++++++++++++++++
+checks if the right line count is give
+
+Case3
+++++++++++++++++++++++
+checks if the right md5 hash-sum is give
+
+Case4
+++++++++++++++++++++++
+Make sure an exception is throw when the wrong parameters are given3
+
+Case5
+++++++++++++++++++++++
+Make sure an exception is throw when the user has no file
+
+Case6
+++++++++++++++++++++++
+Make sure an exception is throw when the user's file size is over 5mb
+
+

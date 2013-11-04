@@ -1,0 +1,11 @@
+Password Specification
+
+Case1
+++++++++++++++++++++++
+checks if password is generated using the default length size is right
+
+Case2
+++++++++++++++++++++++
+checks if password is generated using the given length size is right
+
+
