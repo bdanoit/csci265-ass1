@@ -42,6 +42,27 @@ use exc::exception;
 
 
 
+#Create a test file for the module testing
+open(my $newfile, ">","underFive.dat");
+   print $newfile "foo\n";
+close($newfile);
+
+#Create a test file for the module testing
+open($newfile, ">","Five.dat");
+   print $newfile "foo\n";
+close($newfile);
+
+#Create a test file for the module testing with file size over 5mb
+my $fileSize = 0;
+open($newfile, ">","overFive.dat");
+   while($fileSize < 5*(1024)*(1024))
+   {
+      $fileSize = -s "overFive.dat";
+      print $newfile "foo\n";
+   }
+close($newfile);
+
+
 my $userRequest = parseClientRequest::parse->new();
 
 cew_Variables
@@ -49,32 +70,35 @@ cew_Variables
 # N-CASES
 #############
 
-#Valid Entry - Alpha Alpha
-cew_Ncase($userRequest->parseString("-u User -p Password -uf FileName"),$userRequest->UserName,'User',ne)
 
 #Valid Entry - Alpha Alpha
-cew_Ncase($userRequest->parseString("-u User -p Password -df FileName"),$userRequest->UserName,'User',ne)
+cew_Ncase($userRequest->parseString("-u User -p Password -uf underFive.dat"),$userRequest->UserName,'User',ne)
+
+#Valid Entry - Alpha Alpha
+cew_Ncase($userRequest->parseString("-u User -p Password -df underFive.dat"),$userRequest->UserName,'User',ne)
 
 #Valid Entry - Alpha AlphaNum
 $userRequest = parseClientRequest::parse->new();
-cew_Ncase($userRequest->parseString("-u User -p P4ssw0rd -uf FileName"),$userRequest->UserName,'User',ne)
+cew_Ncase($userRequest->parseString("-u User -p P4ssw0rd -uf underFive.dat"),$userRequest->UserName,'User',ne)
 
 #Valid Entry - AlphaNum Alpha
 $userRequest = parseClientRequest::parse->new();
-cew_Ncase($userRequest->parseString("-u Us3r -p Password -uf FileName"),$userRequest->Request,'UPLOAD',ne)
+cew_Ncase($userRequest->parseString("-u Us3r -p Password -uf underFive.dat"),$userRequest->Request,'UPLOAD',ne)
 
 #Valid Entry - AlphaNum Alpha
 $userRequest = parseClientRequest::parse->new();
-cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf FileName"),$userRequest->Password,'P4ssw0rd',ne)
+cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf underFive.dat"),$userRequest->Password,'P4ssw0rd',ne)
 
 #Valid Entry - Duplicate Switch
 $userRequest = parseClientRequest::parse->new();
-cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf FileName -uf File"),$userRequest->FileName,'File',ne)
+cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf Five.dat -uf underFive.dat"),$userRequest->FileName,'underFive.dat',ne)
 
 
 #############
 # E-CASES
 #############
+
+
 
 #Invalid Number of Parameters
 cew_Ecase($userRequest->parseString("-u foo"), "too_few_arguments")
@@ -83,24 +107,33 @@ cew_Ecase($userRequest->parseString("-u foo"), "too_few_arguments")
 cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd"), "too_few_arguments")
 
 #Invalid User Name
-cew_Ecase($userRequest->parseString("-u fo+o -p P4ssw0rd -uf foo"), "invalid_user_name")
+cew_Ecase($userRequest->parseString("-u fo+o -p P4ssw0rd -uf underFive.dat"), "invalid_user_name")
 
 #Missing switch
 cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd foo"), "invalid_password")
 
 #Invalid Password
-cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd+ -uf fooblah"), "invalid_password")
+cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd+ -uf underFive.dat"), "invalid_password")
 
 #Invalid Switch
-cew_Ecase($userRequest->parseString("-u foo -g P4ssw0rd -uf fooblah"), "invalid_switch")
+cew_Ecase($userRequest->parseString("-u foo -g P4ssw0rd -uf underFive.dat"), "invalid_switch")
 
 #missing switch data
-cew_Ecase($userRequest->parseString("-u foo -p -uf fooblah"), "missing_switch_data")
+cew_Ecase($userRequest->parseString("-u foo -p -uf underFive.dat"), "missing_switch_data")
 
 #Missing Token for switch
 cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd -uf"), "missing_switch_data")
 
-#Missing Token for switch
-cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd -uf"), "missing_switch_data")
+#Check for non existant file
+cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd -uf nonExistant"), "file_does_not_exist")
+
+#Check for a file over 5MB
+cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd -uf overFive.dat"), "file_too_large")
+
+
+#Remove module test file
+unlink "Five.dat" if -e "Five.dat";
+unlink "underFive.dat" if -e "underFive.dat";
+unlink "overFive.dat" if -e "overFive.dat";
 
 cew_Summary
