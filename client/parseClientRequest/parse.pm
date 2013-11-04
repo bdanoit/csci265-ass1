@@ -65,6 +65,9 @@ sub parseString{
          #Upload Or Download
          elsif ($Command =~ /^UF$/i)
          {
+            die exc::exception->new("file_does_not_exist") unless (-e $Data);
+            my $fileSize = -s "$Data";           
+            die exc::exception->new("file_too_large") unless ($fileSize < 5*(1024)*(1024));           
             $self->{'Request'} = "UPLOAD";
             $self->{'FileName'} = $Data;
          }
