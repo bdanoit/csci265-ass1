@@ -18,7 +18,7 @@ sub new {
 
    my $self = {passLength => 12};
 
-   if(defined($length)){
+   if(defined($length)&& $length =~ /^[0-9]+$/){
       $self->{passLength} = $length;
    }
 

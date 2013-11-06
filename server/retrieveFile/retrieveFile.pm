@@ -51,6 +51,7 @@ sub new {
             while(defined (my $line = <$handle>)){
                push @data, $line;
             }
+            close($handle);
          }
          else
          {

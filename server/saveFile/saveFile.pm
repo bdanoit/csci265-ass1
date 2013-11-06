@@ -1,5 +1,5 @@
 package saveFile::saveFile;
-#!/usr/bin/perl
+
 
 #Mandip Sangha, Baleze Danoit CSCI 265
 
@@ -82,6 +82,7 @@ sub saveFileToDir {
             $countline++;
             if($countline == $self->{linecount}){ last; }
          }
+         close($handle);
          unless((md5_hex(@data) eq $self->{'checksum'}) && ($countline == $self->{'linecount'})){
             unlink $tempfile if -e $tempfile;
             die exc::exception->new("corrupt_file");

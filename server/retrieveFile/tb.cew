@@ -54,7 +54,7 @@ print $file "foo\n";
 close($file);
 
 #Create a test file for the module testing with file size over 5mb
-open(my $file, ">","../saveFile/upload/$user1.dat");
+open($file, ">","../saveFile/upload/$user1.dat");
    for (my $i =0; $i != 1500000; $i++)
    {
       print $file "foo\n";
