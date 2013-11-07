@@ -94,4 +94,7 @@ Inputs: None
 Exceptions: All SQLite Errors
 Behaviour:
     Checks DBI::err for any SQL errors
+    Catches two DBI errors and reformats output:
+        column id is not unique -> storage_user_exists
+        foreign key constraint failed -> storage_user_not_exist
     throws exception containing DBI::errstr if error is present

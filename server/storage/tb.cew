@@ -1,5 +1,5 @@
 #================================================================--
-# Design Unit  : cew testbench for stack
+# Design Unit  : cew testbench for Server Storage
 #
 # File Name    : tb.cew
 #
@@ -81,15 +81,11 @@ cew_Ncase($db->addPasswordsByUser($testuser, \@test_passwords),$db->passwordsByU
 #Make sure one of newly added passwords exists
 cew_Ncase(,$db->passwordByUserExists($testuser, $test_passwords[2]),1,!=);
 
-#Add an invalid password to test user
-@test_passwords = ("pimp@");
-cew_Ecase($db->addPasswordsByUser($testuser, \@test_passwords),"storage_invalid_password")
-
 #Remove a password and make sure count is set to 2
 undef @passwords;
 cew_Ncase($db->deletePasswordByUser($testuser, 'barmitzvah'),$db->passwordsByUser($testuser, \@passwords),2,!=);
 
-#Remove all passwords and make sure count is set to 2
+#Remove all passwords and make sure count is set to 0
 undef @passwords;
 cew_Ncase($db->deletePasswordsByUser($testuser),$db->passwordsByUser($testuser, \@passwords),0,!=);
 

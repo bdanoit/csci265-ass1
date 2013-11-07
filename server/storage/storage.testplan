@@ -1,0 +1,20 @@
+CREATE USER
+    create an instance of storage
+    add an invalid user
+    add a valid user
+    check if newly added user exists
+    make sure duplicate users are not allowed
+
+ADD PASSWORD(S)
+    add passwords to non-existant user
+    add invalid passwords to previously added user
+    add 3 valid passwords to previously added user
+    make sure newly added passwords exist
+
+REMOVE PASSWORD(S)
+    remove a single password, make sure other two passwords still exist
+    remove all passwords from user and make sure no passwords still exist
+
+DELETE USER
+    add a password to user
+    delete user, make sure password does not exist in password table
