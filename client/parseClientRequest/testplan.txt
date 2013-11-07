@@ -1,0 +1,59 @@
+###################################
+            TEST PLAN
+###################################
+
+***********
+CEW N-CASES
+***********
+-------------------------------------------------------
+Standard switch format: USERNAME PASSWORD REQUEST TYPE
+-------------------------------------------------------
+
+#Valid Entry - Alpha username Alpha password UPLOAD request type check username.
+
+#Valid Entry - AlphaNumeric username, Alpha password and download check request type.
+
+#Valid Entry - AlphaNumeric username, Alpha password and upload check request type.
+
+#Valid Entry - Alpha username AlphaNum check username.
+
+#Valid Entry - AlphaNum UserName Alpha password check the password.
+
+#Valid Entry - Check for Duplicate Switches
+
+-------------------------------------------------------
+Alternate switch format: PASSWORD REQUEST TYPE USERNAME
+-------------------------------------------------------
+
+#Valid Entry - Alpha username Alpha password UPLOAD request type check username.
+
+
+***********
+CEW E-CASES
+***********
+
+-------------------------------------------------------
+Standard switch format: USERNAME PASSWORD REQUEST TYPE
+-------------------------------------------------------
+
+#Invalid Entry - Invalid Number of Parameters
+
+#Invalid Entry - Missing File Upload/Download Switch and Token
+
+#Invalid Entry - Uses 3 valid switches but one is a duplicate
+
+#Invalid Entry - Invalid User Name
+
+#Invalid Entry - Missing upload or download switch
+
+#Invalid Entry - Invalid Password
+
+#Invalid Entry - Invalid switch with data after it
+
+#Invalid Entry - Missing password after switch
+
+#Invalid Entry - Missing upload file name after switch
+
+#Invalid Entry - Check for non existant file
+
+#Invalid Entry - Check for a file over 5MB
