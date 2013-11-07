@@ -66,7 +66,6 @@ cew_Variables
 #NCASES
 #++++++++++++++++++++++++++++
 
-#checks if a file can be save if the right parameters are given
 open($stream, "<","test.tmp");
 cew_Ncase($testsaveFile = saveFile::saveFile->new($user,$stream,3,md5_hex(@data)),0,0,!=)
 cew_Ncase(, $testsaveFile->saveFileToDir(), 1, !=)
@@ -76,13 +75,11 @@ close($stream);
 #ECASES
 #++++++++++++++++++++++++++++
 
-#Make sure when the wrong number of lines is give it throw exception 
 open($stream, "<","test.tmp");
-cew_Ncase($testsaveFile = saveFile::saveFile->new($user,$stream,4,md5_hex(@data)),0,0,!=)
+$testsaveFile = saveFile::saveFile->new($user,$stream,4,md5_hex(@data))
 cew_Ecase($testsaveFile->saveFileToDir(), "corrupt_file")
 #close($stream);
 
-#Make sure an exception is throw when the wrong parameters are given
 cew_Ecase($testsaveFile = saveFile::saveFile->new(), "username_not_defined")
 
 cew_Ecase($testsaveFile = saveFile::saveFile->new($user), "socket_not_defined")
@@ -92,16 +89,18 @@ cew_Ecase($testsaveFile = saveFile::saveFile->new($user,$stream), "linecount_not
 cew_Ecase($testsaveFile = saveFile::saveFile->new($user,$stream,3), "checksum_not_defined")
 close($stream);
 
-#Make sure an exception is throw when user file is locked
+#Used to locked the users file
 open($stream, ">","upload/$user.tmp");
 print $stream "foo\n";
 close($stream);
+
 open($stream, "<","test.tmp");
-cew_Ncase($testsaveFile = saveFile::saveFile->new($user,$stream,3,md5_hex(@data)),0,0,!=)
+$testsaveFile = saveFile::saveFile->new($user,$stream,3,md5_hex(@data))
 cew_Ecase($testsaveFile->saveFileToDir(), "file_locked")
 close($stream);
-unlink "upload/$user.tmp" if -e "upload/$user.tmp";
+
 
 #Remove module test file
+unlink "upload/$user.tmp" if -e "upload/$user.tmp";
 unlink "test.tmp" if -e "test.tmp";
 cew_Summary

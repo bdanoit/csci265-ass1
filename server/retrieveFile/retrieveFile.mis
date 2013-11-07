@@ -27,6 +27,7 @@ Class Method retrieveFileToDir
 ------------------------------
 Inputs: /
 Assumtion: The retrieveFile's instance is set right
+            The file directory for the user file exists
 Exceptions: /
 Behaviour:
 	Write from retrieveFile's "data" line by line to socket
