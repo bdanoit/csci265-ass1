@@ -16,11 +16,12 @@ Class Method parse
 ------------------
 Inputs: (string) args
 Exceptions:
-    if user is not defined
-    if password is not defined
+    if args is not defined
+    if user is not contained
+    if password is not contained
     if type is neither UPLOAD or DOWNLOAD
-    if lines is defined and not numeric
-    if lines is defined and checksum is not defined
+    if lines is contained and not numeric
+    if lines is contained and checksum is not defined
 Behaviour:
     parses args, expects format of:
         <USER>|<PASSWORD>|<TYPE>

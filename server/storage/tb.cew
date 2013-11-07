@@ -1,36 +1,17 @@
 #================================================================--
 # Design Unit  : cew testbench for Server Storage
-#
 # File Name    : tb.cew
-#
 # Purpose      : unit testing
-#
-# Note         :
-#
-# Limitations  :
-#
-# Errors       : none known
-#
-# Modules      : storage::storage
-#
+# Modules      : Server storage::storage
 # Dependences  : cew
-#
 # Author       : Baleze Danoit, Vancouver Island University
-#
 # System       : Perl (Linux)
-#
-#------------------------------------------------------------------
-# Revision List
-# Version      Author  Date    Changes
-# 1.0          BD      Oct 22  New version
-#================================================================--
 
 $|=1;
 use strict;
 use warnings;
 
 $SIG{__DIE__} = sub{ };
-#$SIG{__WARN__} = sub{ };
 
 include(../../lib/cew/bin/cew.pl)
 

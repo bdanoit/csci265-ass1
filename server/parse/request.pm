@@ -32,6 +32,9 @@ sub new{
 sub parse{
     my $self = shift @_;
     my $args = shift @_;
+    
+    die exc::exception->new("request_requires_args") unless defined $args;
+    
     (my $user, my $pass, my $type, my $lines, my $checksum) = split /\|/, $args;
     
     die exc::exception->new("request_requires_user") unless defined $user;

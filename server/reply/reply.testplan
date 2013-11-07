@@ -1,0 +1,8 @@
+INITIALIZE
+    create a new instance of reply without a socket
+    create a new instance of reply with a socket
+SEND REQUEST
+    send a request with no parameters
+    send a request with invalid line count
+    send a request without a checksum
+    send a properly formatted request

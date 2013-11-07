@@ -1,8 +1,17 @@
+#================================================================--
+# Design Unit  : cew testbench for Server Storage
+# File Name    : tb.cew
+# Purpose      : unit testing
+# Modules      : Server reply::reply
+# Dependences  : cew
+# Author       : Baleze Danoit, Vancouver Island University
+# System       : Perl (Linux)
+
 $|=1;
 use strict;
 use warnings;
 
-$SIG{__DIE__} =sub { };
+$SIG{__DIE__} = sub{ };
 
 include(../../lib/cew/bin/cew.pl)
 

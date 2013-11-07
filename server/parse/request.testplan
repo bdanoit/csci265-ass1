@@ -1,0 +1,16 @@
+INITIALIZE
+    create a instance of request
+PARSING
+    parse without providing arguments
+    parse empty string of arguments
+    parse string with 1 of 5 argument
+    parse string with 2 of 5 arguments
+    parse string with 3 of 5 arguments
+    parse string with 4 of 5 arguments
+    parse string with all arguments
+VARIABLES
+    make sure user variable is set
+    make sure password variable is set
+    make sure type variable is set
+    make sure lines variable is set
+    make sure checksum variable is set

@@ -1,8 +1,17 @@
+#================================================================--
+# Design Unit  : cew testbench for Server Parse Request
+# File Name    : tb.cew
+# Purpose      : unit testing
+# Modules      : Server parse::request
+# Dependences  : cew
+# Author       : Baleze Danoit, Vancouver Island University
+# System       : Perl (Linux)
+
 $|=1;
 use strict;
 use warnings;
 
-$SIG{__DIE__} =sub { };
+$SIG{__DIE__} = sub{ };
 
 include(../../lib/cew/bin/cew.pl)
 
@@ -16,12 +25,14 @@ use parse::request;
 use exc::exception;
 
 
-my $params = parse::request->new();
+my $params;
 
 
 cew_Variables
 
-cew_Ecase($params->parse(),"request_requires_user")
+cew_Ncase($params = parse::request->new(),0,0,!=)
+cew_Ecase($params->parse(),"request_requires_args")
+cew_Ecase($params->parse(""),"request_requires_user")
 cew_Ecase($params->parse("hello"),"request_requires_password")
 cew_Ecase($params->parse("hello|123456"),"request_invalid_type")
 cew_Ecase($params->parse("hello|123456|upload|lol"),"request_invalid_lines")
