@@ -30,10 +30,10 @@ sub new{
         'data'=>\@data
     };
     
-    if($type == "UPLOAD"){
+    if($type eq "UPLOAD"){
         die exc::exception->new('request_file_not_exists') unless (-e $file);
         my $handle;
-        open $handle, '<', $file;
+        open $handle, '<', $file or die exc::exception->new('request_could_not_open_file');
         while(defined (my $line = <$handle>)){
             push @data, $line;
         }
@@ -50,7 +50,7 @@ sub sendRequest{
     my $data = $self->{'data'};
     my $query;
     
-    if($self->{'type'} == "UPLOAD"){
+    if($self->{'type'} eq "UPLOAD"){
         my $lines = scalar @$data;
         my $checksum = md5_hex(@$data);
         $query = join("|", $self->{'user'},$self->{'password'}, $self->{'type'}, $lines, $checksum);
