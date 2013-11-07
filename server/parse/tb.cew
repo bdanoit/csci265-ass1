@@ -21,8 +21,8 @@ my $params = parse::request->new();
 
 cew_Variables
 
-cew_Ecase($params->parse(""),"request_invalid_user")
-cew_Ecase($params->parse("hello"),"request_invalid_password")
+cew_Ecase($params->parse(),"request_requires_user")
+cew_Ecase($params->parse("hello"),"request_requires_password")
 cew_Ecase($params->parse("hello|123456"),"request_invalid_type")
 cew_Ecase($params->parse("hello|123456|upload|lol"),"request_invalid_lines")
 cew_Ecase($params->parse("hello|123456|upload|12"),"request_invalid_checksum")

@@ -1,0 +1,30 @@
+Server Parse Request Specification
+
+Class Method new
+----------------
+Inputs: None
+Exceptions: None
+Behaviour:
+    Creates a hash with
+        user        #   stores the user name
+        password    #   stores the user password
+        type        #   stores the type of request
+        lines       #   stores the line count if type upload
+        checksum    #   stores the user checksum if type upload
+
+Class Method parse
+------------------
+Inputs: (string) args
+Exceptions:
+    if user is not defined
+    if password is not defined
+    if type is neither UPLOAD or DOWNLOAD
+    if lines is defined and not numeric
+    if lines is defined and checksum is not defined
+Behaviour:
+    parses args, expects format of:
+        <USER>|<PASSWORD>|<TYPE>
+    or:
+        <USER>|<PASSWORD>|<TYPE>|<LINECOUNT>|<CHECKSUM>
+Assumptions:
+    Assumes user name and password are valid, they will be validated within storage module
