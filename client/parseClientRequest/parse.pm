@@ -87,7 +87,8 @@ sub parseString{
          die exc::exception->new("missing_switch_data")
       }
    }
-   if ($Count < 3)
+   
+   if (!(defined $self->{'FileName'})||!(defined $self->{'UserName'} )||!(defined $self->{'Password'}))
    {
       die exc::exception->new("too_few_arguments");
    }

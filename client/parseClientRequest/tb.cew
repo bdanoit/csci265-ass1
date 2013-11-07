@@ -101,33 +101,48 @@ cew_Ncase($userRequest->parseString("-u Us3r -p P4ssw0rd -uf Five.dat -uf underF
 
 
 #Invalid Number of Parameters
+$userRequest = parseClientRequest::parse->new();
 cew_Ecase($userRequest->parseString("-u foo"), "too_few_arguments")
 
 #Missing File Upload/Download Switch and Token
+$userRequest = parseClientRequest::parse->new();
 cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd"), "too_few_arguments")
 
+#Uses 3 valid switches but missing one required
+$userRequest = parseClientRequest::parse->new();
+cew_Ecase($userRequest->parseString("-u foo -uf underFive.dat -uf underFive.dat"), "too_few_arguments")
+
+
 #Invalid User Name
+$userRequest = parseClientRequest::parse->new();
 cew_Ecase($userRequest->parseString("-u fo+o -p P4ssw0rd -uf underFive.dat"), "invalid_user_name")
 
 #Missing switch
+$userRequest = parseClientRequest::parse->new();
 cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd foo"), "invalid_password")
 
 #Invalid Password
+$userRequest = parseClientRequest::parse->new();
 cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd+ -uf underFive.dat"), "invalid_password")
 
 #Invalid Switch
+$userRequest = parseClientRequest::parse->new();
 cew_Ecase($userRequest->parseString("-u foo -g P4ssw0rd -uf underFive.dat"), "invalid_switch")
 
 #missing switch data
+$userRequest = parseClientRequest::parse->new();
 cew_Ecase($userRequest->parseString("-u foo -p -uf underFive.dat"), "missing_switch_data")
 
 #Missing Token for switch
+$userRequest = parseClientRequest::parse->new();
 cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd -uf"), "missing_switch_data")
 
 #Check for non existant file
+$userRequest = parseClientRequest::parse->new();
 cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd -uf nonExistant"), "file_does_not_exist")
 
 #Check for a file over 5MB
+$userRequest = parseClientRequest::parse->new();
 cew_Ecase($userRequest->parseString("-u foo -p P4ssw0rd -uf overFive.dat"), "file_too_large")
 
 
