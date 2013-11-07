@@ -30,13 +30,10 @@ cew_Variables
 cew_Ecase($reply = reply::reply->new(),'reply_no_socket_provided')
 cew_Ncase($reply = reply::reply->new($handle),0,0,!=)
 
-cew_Ecase($reply->send('ERR'), 'reply_invalid_type')
-cew_Ecase($reply->send('ERROR'), 'reply_error_requires_value')
-cew_Ncase(,$reply->send('ERROR', 'dumb_error'), 1, !=)
-cew_Ncase(,$reply->send('SUCCESS'), 1, !=)
-cew_Ecase($reply->send('SUCCESS', 'hi'), 'reply_success_invalid_linecount')
-cew_Ecase($reply->send('SUCCESS', 20),'reply_success_checksum_required');
-cew_Ncase(,$reply->send('SUCCESS', 20, 'checksum'), 1, !=)
+cew_Ncase(,$reply->send(), 1, !=)
+cew_Ecase($reply->send('hi'), 'reply_invalid_linecount')
+cew_Ecase($reply->send(20),'reply_checksum_required');
+cew_Ncase(,$reply->send(20, 'checksum'), 1, !=)
 
 cew_Summary
 

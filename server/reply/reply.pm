@@ -30,29 +30,20 @@ sub new{
 sub send{
     my $self = shift @_;
     my $sock = $self->{'sock'};
-    my $type = uc(shift @_);
-    my $value = shift @_;
+    my $type = 'SUCCESS';
+    my $linecount = shift @_;
     my $checksum = shift @_;
     my $query;
     
-    die exc::exception->new('reply_invalid_type') unless ($type =~ /^(?:ERROR|SUCCESS)$/);
-    if($type eq 'ERROR'){
-            die exc::exception->new('reply_error_requires_value') unless defined $value;
-            $query = join('|', ($type));
+    die exc::exception->new('reply_invalid_linecount') if (defined $linecount && $linecount !~ /^[0-9]+$/);
+    die exc::exception->new('reply_checksum_required') if (defined $linecount && !defined $checksum);
+    if(defined $linecount && defined $checksum){
+        $query = join('|', ($type, $linecount, $checksum));
     }
     else{
-        die exc::exception->new('reply_success_invalid_linecount') if (defined $value && $value !~ /^[0-9]+$/);
-        die exc::exception->new('reply_success_checksum_required') if (defined $value && !defined $checksum);
-        if(defined $value && defined $checksum){
-            $query = join('|', ($type, $value, $checksum));
-        }
-        else{
-            $query = join('|', ($type));
-        }
+        $query = join('|', ($type));
     }
     
-    print $sock "$query\n";
-    
-    return 1;
+    print $sock $query, "\n";
 }
 

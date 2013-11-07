@@ -1,0 +1,21 @@
+Server Reply Specification
+
+Class Method new
+----------------
+Inputs: (Socket::IO) sock
+Exceptions: if socket is not defined
+Behaviour:
+    Creates a hash with
+        sock        #   stores the Socket::IO instance
+
+Class Method send
+------------------
+Inputs: (string) type, OPTIONAL (string) linecount, OPTIONAL (string) checksum
+Exceptions:
+    if linecount is provided and is not valid
+    if linecount is provided without checksum
+Behaviour:
+    if linecount and checksum are not defined, sends reply format:
+        SUCCESS\n
+    if linecount and checksum are defined, sends reply format:
+        SUCCESS|<LINECOUNT>|<CHECKSUM>\n

@@ -44,13 +44,13 @@ while (my $client = $sock->accept()) {
                     my $upload = saveFile::saveFile->new($user->username, $client, $request->lines, $request->checksum);
                     print "\t$child> Upload started\n";
                     $upload->saveFileToDir();
-                    $reply->send('SUCCESS');
+                    $reply->send();
                     print "\t$child> Upload finished\n";
                 }
                 case 'DOWNLOAD'{
                     print "\t$child> Retrieve started\n";
                     my $retrieve = retrieveFile::retrieveFile->new($user->username, $client);
-                    $reply->send('SUCCESS', $retrieve->getLineCount, $retrieve->md5_checksum);
+                    $reply->send($retrieve->getLineCount, $retrieve->md5_checksum);
                     $retrieve->retrieveFileFromDir();
                     print "\t$child> Retrieve sent\n";
                 }

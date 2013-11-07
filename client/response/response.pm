@@ -39,6 +39,7 @@ sub process{
     die exc::exception->new('response_not_received') unless defined $query;
     
     $query =~ s/\|?\n$//;
+    print $query;
     (my $type, my $value, my $checksum) = split /\|/, $query;
     
     die exc::exception->new('response_malformed') unless $type =~ /^(?:SUCCESS|ERROR)$/;
@@ -67,9 +68,11 @@ sub process{
         my @data;
         while(defined(my $line = <$sock>)){
             push @data, $line;
+    print $line;
             $count++;
-            if($count == $linecount){ last; }
+            #if($count == $linecount){ last; }
         }
+    #print md5_hex(@data), "\n";
         
         die exc::exception->new('response_corrupt_file') unless(($checksum eq md5_hex(@data)) && ($count == $linecount));
         
