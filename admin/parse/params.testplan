@@ -1,0 +1,20 @@
+EXCEPTIONS
+    check for invalid argument count
+    check for bad command
+    check for bad user name
+CREATE
+    test create command
+    make sure command method returns value
+    make sure user method returns value
+ADDPW
+    test addpw command
+    make sure command method returns value
+    make sure user method returns value
+CLEAN
+    test clean command
+    make sure command method returns value
+    make sure user method returns value
+DELETE
+    test delete command
+    make sure command method returns value
+    make sure user method returns value

@@ -1,8 +1,17 @@
+#================================================================--
+# Design Unit  : cew testbench for Admin Parse Params
+# File Name    : tb.cew
+# Purpose      : unit testing
+# Modules      : Admin parse::params
+# Dependences  : cew
+# Author       : Baleze Danoit, Vancouver Island University
+# System       : Perl (Linux)
+
 $|=1;
 use strict;
 use warnings;
 
-$SIG{__DIE__} =sub { };
+$SIG{__DIE__} = sub{ };
 
 include(../../lib/cew/bin/cew.pl)
 
@@ -41,6 +50,10 @@ cew_Ncase(,$params->user,uc($user),ne);
 
 #Test clean command
 cew_Ncase($params->parse("clean $user"),$params->command,'clean',ne);
+cew_Ncase(,$params->user,uc($user),ne);
+
+#Test delete command
+cew_Ncase($params->parse("delete $user"),$params->command,'delete',ne);
 cew_Ncase(,$params->user,uc($user),ne);
    
 cew_Summary
