@@ -2,16 +2,13 @@ package storage::storage;
 
 # Baleze Danoit
 # CSCI 265
-# Error Types:
-#       bad_array_ref
-#       invalid_user_name
-#       invalid_password
-#       user_exists
-#       all sqlite errors
 
 $|=1;
 
+#libraries
 use lib '../../lib';
+
+#modules
 use strict;
 use warnings;
 use Capture::Tiny qw/capture/;
@@ -22,8 +19,10 @@ use DBD::SQLite;
 
 sub new{
     my $class= shift @_;
+    
+    #present working directory
     my $path = __FILE__;
-    $path =~ s/[^\/]+$//; #pwd
+    $path =~ s/[^\/]+$//;
     
     my $dbname = $path.'fsys.sqlite';
     my $self = {
@@ -37,7 +36,7 @@ sub new{
     #turn on foreign key constraints
     my $fk = $db->do("PRAGMA foreign_keys = ON") or $self->DBIException();
     
-    #load in sql if tables not present
+    #load in sql tables if not exists
     my $exists = $db->selectrow_array("SELECT 1 FROM sqlite_master WHERE type='table' AND name='users';") or $self->DBIException();
     if(!defined($exists)){
         my $handle;
@@ -47,7 +46,7 @@ sub new{
         }
     }
     
-    #turn off automatic warning
+    #turn off automatic errors/warnings
     $db->{'PrintError'} = 0;
     $db->{'PrintWarn'} = 0;
     
@@ -59,7 +58,7 @@ sub passwordsByUser{
     my $self = shift @_;
     my $db = $self->{'db'};
     my $user = shift @_;
-    my $list = shift @_; #reference to array
+    my $list = shift @_; #array reference
     die exc::exception->new("storage_bad_array_ref") unless ref($list);
     
     my $stmt = $db->prepare("select password from user_passwords where user_id = ?;") or $self->DBIException();
@@ -169,16 +168,13 @@ sub validatePassword{
 
 sub DBIException{
     my $self = shift @_;
-    switch($DBI::err){
-        case undef{ return 0 }
-        case 0{ return 0 }
-        default{
-            switch($DBI::errstr){
-                case 'column id is not unique'{ die exc::exception->new("storage_user_exists"); }
-                case 'foreign key constraint failed'{ die exc::exception->new("storage_user_not_exist"); }
-                default{ die exc::exception->new($DBI::errstr); }
-            }
-        }
+    return 0 unless defined $DBI::err;
+    return 0 if $DBI::err == 0;
+    
+    switch($DBI::errstr){
+        case 'column id is not unique'{ die exc::exception->new("storage_user_exists"); }
+        case 'foreign key constraint failed'{ die exc::exception->new("storage_user_not_exist"); }
+        default{ die exc::exception->new($DBI::errstr); }
     }
 }
 

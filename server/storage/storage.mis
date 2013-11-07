@@ -6,8 +6,11 @@ Inputs: None
 Exceptions: None
 Behaviour:
     Creates a Storage instance
-        db          #   instance string for storing sqlite database location
-        result      #   instance string for storing sqlite database query result
+        db          #   instance string for storing persistent database connection
+    Creates a connection to SQLite database using DBI/DBD::SQLite
+    Turns on foreign key constraints
+    Loads in SQL tables if they do not exist
+    Turns off DBI automatic Error/Warning reporting
 
 Class Method passwordsByUser
 ----------------------------
@@ -20,7 +23,6 @@ Class Method userExists
 Inputs: (string) user
 Exceptions: None
 Behaviour:
-    validate user
     return 1 if user exists within users table
 
 Class Method passwordByUserExists
@@ -28,8 +30,6 @@ Class Method passwordByUserExists
 Inputs: (string) user, (string) password
 Exceptions: None
 Behaviour:
-    validate user
-    validate password
     return 1 if user user/password combination exists within user_passwords table
 
 Class Method addUser
@@ -50,22 +50,27 @@ Behaviour: add passwords to user_passwords table
 Class Method deleteUser
 -----------------------
 Inputs: (string) user
-Exceptions: if user does not validate
-Behaviour: delete user from users table (user_passwords will cascade)
+Exceptions: None
+Behaviour:
+    delete user from users table, user_passwords will delete by cascade
+    return 1 on success
+    return 0 on failure
 
 Class Method deletePasswordByUser
 ---------------------------------
 Inputs: (string) user, (string) password
 Exceptions:
     if user does not validate
-    if passwords do not validate
-Behaviour: delete single user password from user_passwords table
+    if password does not validate
+Behaviour: delete single password from user in user_passwords table
 
 Class Method deletePasswordsByUser
 ----------------------------------
 Inputs: (string) user
-Exceptions: if user does not validate
-Behaviour: delete all user passwords from user_passwords table
+Exceptions:
+    if user does not validate
+    if passwords do not validate
+Behaviour: delete all passwords from user in user_passwords table
 
 Class Method validateUser
 -------------------------
@@ -73,17 +78,15 @@ Inputs: (string) entry
 Exceptions: if entry does not validate
 Behaviour:
     validates entry
-    returns 1 if it is alphanum between 4-16 chars
-    returns 0 otherwise
+    returns 1 entry is alphanum between 4-16 chars
 
 Class Method validatePassword
 -----------------------------
 Inputs: (string) entry
-Exceptions: if entry does not validate (alphanum between 4-12 chars)
+Exceptions: if entry does not validate
 Behaviour:
     validates entry
-    returns 1 if it is alphanum between 4-12 chars
-    returns 0 otherwise
+    returns 1 entry is alphanum between 4-12 chars
 
 Class Method DBIException
 -------------------------
