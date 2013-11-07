@@ -1,0 +1,27 @@
+retrieveFile Specification
+
+NCase
+++++++++++++++++++++++
+
+   Case1:
+      checks if a file can be retrieved if the right parameters are given to the method "new"
+
+   Case2:
+      checks if the right line count is given by the method "getLineCount"
+   
+   Case3:
+      checks if the right md5 hash-sum is given by the method "md5_checksum"
+
+ECase
+++++++++++++++++++++++
+   Case1:
+      Make sure an exception is thrown when one or more wrong parameters are given to the method "new"
+   
+   Case2:
+      Make sure an exception is thrown when the user has no file by the method "new"
+   
+   Case3:
+      Make sure an exception is thrown when the user's file size is over 5mb by the method "new"
+
+
+

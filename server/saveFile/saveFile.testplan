@@ -1,0 +1,21 @@
+saveFile TestPlan
+
+NCase
+++++++++++++++++++++++
+
+   Case1:
+      checks if a file can be saved if the correct parameters are given to the methods "new" and "saveFileToDir"
+
+ECase
+++++++++++++++++++++++
+   Case1:
+      Make sure when the wrong number of lines is given to the method "new" the method "saveFileToDir" throws an exception when it trys to save
+   
+   Case2:
+      Make sure an exception is thrown when one or more wrong parameters are given to the method "new"
+
+   Case3:
+      Make sure an exception is thrown when user file is locked by the method "saveFileToDir"
+
+
+

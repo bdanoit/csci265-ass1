@@ -77,7 +77,7 @@ cew_Variables
 #NCASES
 #++++++++++++++++++++++++++++
 
-#checks if a file can be save if the right parameters are given
+#checks if a file can be retrieved if the right parameters are given
 open($stream, ">","test.tmp");
 $testRetrieveFile = retrieveFile::retrieveFile->new($user,$stream);
 cew_Ncase(, $testRetrieveFile->retrieveFileFromDir(), 1, !=)
