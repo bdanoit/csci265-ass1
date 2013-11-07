@@ -34,7 +34,6 @@ sub process{
     my $self = shift @_;
     my $sock = $self->{'sock'};
     my $file = shift @_;
-    my $force = shift @_;
     my $query = <$sock>;
     
     die exc::exception->new('response_not_received') unless defined $query;
@@ -49,11 +48,12 @@ sub process{
         return 1;
     }
     else{
-        if(!defined $value){
+        my $linecount = $value;
+        if(!defined $linecount){
             $self->{'message'} = "Your upload was successful.\n";
             return 1;
         }
-        elsif(defined($value) && $value !~ /^[0-9]+$/){
+        elsif(defined($linecount) && $linecount !~ /^[0-9]+$/){
             die exc::exception->new('response_invalid_line_count');
         }
         elsif(!defined($checksum)){
@@ -62,24 +62,16 @@ sub process{
         elsif(!defined($file)){
             die exc::exception->new('response_path_not_provided');
         }
-        elsif(-e $file){
-            print "The file {$file} you are writing to already exists. Would you like to overwrite it? (y/n): ";
-            my $input = <STDIN>;
-            if($input !~ /^(?:y|yes)\n$/i){
-                $self->{'message'} = "File was not saved.\n";
-                return 1;
-            }
-        }
         
         my $count = 0;
         my @data;
         while(defined(my $line = <$sock>)){
             push @data, $line;
             $count++;
-            if($count == $value){ last; }
+            if($count == $linecount){ last; }
         }
         
-        die exc::exception->new('response_corrupt_file') unless(($checksum eq md5_hex(@data)) && ($count == $value));
+        die exc::exception->new('response_corrupt_file') unless(($checksum eq md5_hex(@data)) && ($count == $linecount));
         
         open(my $handle, ">",$file) or die exc::exception->new('response_cannot_open_file');
         foreach my $line (@data){

@@ -1,0 +1,41 @@
+Parse Client Request Specification
+##################################
+
+Class Method new
+----------------
+Inputs: (Socket::IO) sock
+Exceptions: if sock is not provided
+Behaviour:
+   Creates an object that contains the variables 
+      - sock
+      - message
+   Returns reference to self
+Assumptions: Assumes that the socket variable is a of Socket::IO class
+
+
+Class Method process
+------------------------
+Inputs: (String) file
+Exceptions:
+    if socket is closed
+    if response is not valid
+    if line count is not valid
+    if line count is provided and checksum is not provided
+    if a file path is not provided for storing the file
+    if the checksums or line counts do not match
+Behaviour:
+    parses first line of socket which contains the server response query
+        Query Formats:
+            ERROR|<MESSAGE>
+            SUCCESS
+            SUCCESS|<LINECOUNT>|<CHECKSUM>
+    if response is success and server is sending file, saves file
+Assumptions: None 
+   
+Class Method message
+------------------------
+Inputs: None
+Exceptions: None
+Behaviour:
+   Returns class variable message
+Assumptions: None

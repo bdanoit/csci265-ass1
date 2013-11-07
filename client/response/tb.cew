@@ -49,8 +49,6 @@ for my $line (@data){ print $writer $line; }
 cew_Ecase($obj->process($test),'response_corrupt_file')
 close $reader; close $writer;
 
-#cew_Ecase($obj->process($test),'response_cannot_open_file
-
 open2( $reader, $writer, "cat" );
 print $writer "SUCCESS\n";
 cew_Ncase($obj = response::response->new($reader),$obj->process($test), 1, !=)
@@ -64,14 +62,8 @@ close $reader; close $writer;
 open2( $reader, $writer, "cat" );
 print $writer "SUCCESS|2|",md5_hex(@data),"\n";
 for my $line (@data){ print $writer $line; }
-cew_Ncase($obj = response::response->new($reader),$obj->process($test), 1, !=)
+cew_Ncase($obj = response::response->new($reader);$obj->message,$obj->process($test), 1, !=)
 close $reader; close $writer;
-
-#open2( $reader, $writer, "cat" );
-#print $writer "SUCCESS|2|",md5_hex(@data),"\n";
-#for my $line (@data){ print $writer $line; }
-#cew_Ncase($obj = response::response->new($reader, 1);$obj->message;,$obj->process($test), 1, !=)
-#close $reader; close $writer;
 
 cew_Ecase($obj->process($test),'response_not_received')
 
