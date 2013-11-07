@@ -1,0 +1,12 @@
+Quality Control Policy
+**********************
+
+After a code file is completed it is to be reviewed during an Inspection Meeting.
+
+Inspection Meeting Format:
+	Minimum of 4 people in attendance, the author must be in attendance.
+	A person other than the author is the guide the participants through the material.
+	Both the code and the associated documentation constitute the material to be reviewed.
+	All changes that are agreed upon by a majority of the meeting participants is to be logged in the meeting minutes and be completed by the original author.
+	If changes are requested, a follow-up Inspection Meeting is to organized.
+	During a follow-up Inspection Meeting, confirmation that requested changes were completed is to be logged in the meeting minutes.

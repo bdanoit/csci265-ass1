@@ -9,6 +9,8 @@ Exceptions: If username is invalid throw exception
 Behaviour:  
 	    Verifies the username and password are correct before removing the password that was used from the database.
 
+Assumptions:
+	    Assumes that the the method was called using 2 string parameters.
 
 Class Method username
 ---------------------
