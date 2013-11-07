@@ -2,10 +2,6 @@ package parse::params;
 
 # Baleze Danoit
 # CSCI 265
-# Error Types:
-#       invalid_command
-#       invalid_user_name
-#       invalid_parameter_count
 
 $|=1;
 
