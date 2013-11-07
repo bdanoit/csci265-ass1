@@ -18,3 +18,7 @@ DELETE
     test delete command
     make sure command method returns value
     make sure user method returns value
+LISTPW
+    test listpw command
+    make sure command method returns value
+    make sure user method returns value

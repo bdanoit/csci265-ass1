@@ -49,6 +49,14 @@ try{
             $db->deleteUser($user);
             print "Deleted {$user}\n";
         };
+        case 'listpw'{
+            my @passwords;
+            $db->passwordsByUser($user, \@passwords);
+            print "Passwords for {$user}\n";
+            foreach my $password (@passwords){
+                print "\t$password\n";
+            }
+        };
     };
 }
 catch{
