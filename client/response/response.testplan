@@ -1,0 +1,15 @@
+INITIALIZE
+    create response instance without socket
+    create response instance with socket
+PROCESS EXCEPTIONS
+    process server no response 
+    process server malformed response
+    process server success response with invalid line count
+    process server success response without checksum
+    process server success response without file path
+PROCESS SUCCESS
+    process server success response without file data
+    process server success response with corrupt file data
+    process server success response with good file data
+PROCESS ERROR
+    process server error response

@@ -68,11 +68,9 @@ sub process{
         my @data;
         while(defined(my $line = <$sock>)){
             push @data, $line;
-    print $line;
             $count++;
-            #if($count == $linecount){ last; }
+            if($count == $linecount){ last; }
         }
-    #print md5_hex(@data), "\n";
         
         die exc::exception->new('response_corrupt_file') unless(($checksum eq md5_hex(@data)) && ($count == $linecount));
         
