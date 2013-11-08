@@ -17,7 +17,7 @@ Assumptions: None
 
 Class Method parseString
 ------------------------
-Inputs: (String) Containing a User Name, a password, and a file location. 
+Inputs: (String) Containing switch/value pairs
 Exceptions:
 
    If the user name is not Alphanumeric an exception will be thrown:
@@ -32,7 +32,7 @@ Exceptions:
    If a switch isn't immediately followed by a (user name/password/file name) an exception will be thrown:  
       "missing_switch_data"
    
-   If there are less than 3 switches an exception will be thrown:
+   If there is a missing switch:
       "too_few_arguments"
       
    If the file to be uploaded doesn't exist an exception will be thrown: 
@@ -42,33 +42,31 @@ Exceptions:
       "file_too_large"
       
 Behaviour:
-   Will accept any combination of UPPER/LOWER case letters in switches 
-   Checks that there is a Key Value pair for each switch
-	Checks that the USERNAME is alphabetic
-	Checks that the PASSWORD is ALPHANUMERIC
-	Checks that you have chosen either UPLOAD or DOWNLOAD in your switch
-	Checks that a file name is PASSED
+   The Client interface will pass the Client Request Module a string in the format
+	-Switch Value
 
 	There are 4 Valid switches: 
 		-U (User Name)
 		-P (Password)
 		-UF (Upload File) 
 		-DF (Download File)
-   The Client interface will pass the Client Request Module a string in the format
-	-Switch Value
-	
-	Switch parameters are found immediately following the switch.
+
+   Will accept any number of valid switches, case insensitive 
+   Checks that there is a Value for each switch
+	Checks that -U value is ALPHANUMERIC
+	Checks that -P value is ALPHANUMERIC
+	Checks that you have chosen either -UF or -DF with a corresponding value
 	
    Three switches should be present at a time: -U -P and either -UF or -DF
    
-   If the UF switch is given:
+   If the -UF switch is given:
       Checks if file exists
       Checks if the file size is less than 5mb
    
-   If a switch is duplicated, the farthest RIGHT switch will be considered valid.
+   If a switch is duplicated, the farthest RIGHT switch value will be used
 
-	Example:
-	"./FSysClient -U UserName -P P4s5w0rD -UF FileName"
+	Example usage:
+	"./fsys -U UserName -P P4s5w0rD -UF FileName"
 
    
 Class Method UserName

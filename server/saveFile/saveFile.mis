@@ -1,9 +1,9 @@
 saveFile Specification
+######################
 
 Class Method new
 ----------------
-Inputs: Username, socket, linecount, checksum
-Assumtion: /
+Inputs: (string) username, (Socket::IO) socket, (integer) linecount, (hex) checksum
 Exceptions: If username not defined
             If socket not defined
 	         If linecount not defined
@@ -17,14 +17,13 @@ Behaviour:
 
 Class Method saveFileToDir
 --------------------------
-Inputs: /
-Assumtion: The retrieveFile's instance is set right
-            The file directory for the user file exists
+Inputs: None
+Assumptions: The file directory for the user file exists
 Exceptions: If file is locked
 	         If file can't be opened
-            If file is line count or md5 hash-sum is not the same
-            If the temp file can't be move to the actual data file
+            If line count or md5 hash-sum do not match provided variables
+            If the temp file fails to overwrite the data file
 Behaviour:
 	Reads from socket line by line to a temp file
-		and then moves the temp file to the right spot
-		and returns "1" if file was save
+		and then overwrites the user data file
+		returns "1" if file was saved

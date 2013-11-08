@@ -1,16 +1,19 @@
 User Specification
+##################
 
 Class Method new
 ----------------
-Inputs: username, password
-Exceptions: If username is invalid throw exception
-	    If password is invalid throw exception
+Inputs: (string) username, (string) password
+Exceptions: If username is invalid
+	         If password is invalid
 
 Behaviour:  
-	    Verifies the username and password are correct before removing the password that was used from the database.
+	    Verifies the username and password match an entry in database
+       Deletes the password from database
+       Stores username inside class instance
 
 Assumptions:
-	    Assumes that the the method was called using 2 string parameters.
+	    Assumes that the method was called using valid username and password
 
 Class Method username
 ---------------------

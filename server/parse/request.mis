@@ -1,11 +1,12 @@
 Server Parse Request Specification
+##################################
 
 Class Method new
 ----------------
 Inputs: None
 Exceptions: None
 Behaviour:
-    Creates a hash with
+    Creates an instance with
         user        #   stores the user name
         password    #   stores the user password
         type        #   stores the type of request
@@ -17,8 +18,8 @@ Class Method parse
 Inputs: (string) args
 Exceptions:
     if args is not defined
-    if user is not contained
-    if password is not contained
+    if user is not contained within args
+    if password is not contained within args
     if type is neither UPLOAD or DOWNLOAD
     if lines is contained and not numeric
     if lines is contained and checksum is not defined
