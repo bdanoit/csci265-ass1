@@ -1,0 +1,42 @@
+﻿CLIENT INTERFACE TESTPLAN
+*************************
+Empty
++++++
+test without any switches
+
+Empty Switches
+++++++++++++++
+test each valid switch (u, p, uf, df), and one value that is not a valid switch (x) without accompanying values
+
+Username (u) Switch
++++++++++++++++++++
+test without a value
+test with invalid value
+test with non-existant user
+test with exiting user
+
+Password (p) Switch
++++++++++++++++++++
+test without a value
+test with invalid value
+test with non-existant password
+test with exiting password
+
+Upload File (uf) Switch
++++++++++++++++++++++++
+test without a file
+test with a file
+
+Download File (df) Switch
++++++++++++++++++++++++++
+test without a file path
+test with a file path
+
+Mixture of Switches using both Valid and Invalid values
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-> u, p
+-> u, uf
+-> u, df
+-> u, p, uf
+-> u, p, df
+-> u, p, uf, df

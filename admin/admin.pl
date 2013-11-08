@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 #FSYS Admin
+#Baleze Danoit, CSCI 265
 
 #libraries
 use lib '../lib';
@@ -11,6 +12,7 @@ use warnings;
 use parse::params;
 use storage::storage;
 use generate::password;
+use exc::exception;
 use Try::Tiny;
 use Switch;
 

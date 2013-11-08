@@ -40,7 +40,7 @@ sub new{
     my $exists = $db->selectrow_array("SELECT 1 FROM sqlite_master WHERE type='table' AND name='users';") or $self->DBIException();
     if(!defined($exists)){
         my $handle;
-        open $handle, "storage.sql" or die exc::exception('storage_sql_init_not_found');
+        open $handle, $path.'storage.sql' or die exc::exception('storage_sql_init_not_found');
         while(defined(my $sql = <$handle>)){
             my $stmt = $db->do($sql) or die $self->DBIException();
         }
