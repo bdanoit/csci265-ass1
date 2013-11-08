@@ -1,12 +1,13 @@
 Server Reply Specification
+##########################
 
 Class Method new
 ----------------
 Inputs: (Socket::IO) sock
-Exceptions: if socket is not defined
+Exceptions: if sock is not defined
 Behaviour:
-    Creates a hash with
-        sock        #   stores the Socket::IO instance
+    Creates an instance with
+        sock        #   stores the Socket::IO socket
 
 Class Method send
 ------------------

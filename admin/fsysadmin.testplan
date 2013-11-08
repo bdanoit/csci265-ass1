@@ -1,0 +1,34 @@
+ADMINISTRATOR INTERFACE TESTPLAN
+********************************
+
+Empty
++++++
+Test without any commands
+
+Invalid Command
++++++++++++++++
+Test an invalid command
+
+
+Valid Commands
+++++++++++++++
+
+CREATE
+------
+Test with no user, invalid user, and valid user
+
+ADDPW
+-----
+Test with no value, invalid value, and previously created user
+
+LISTPW
+------
+Test with no value, invalid value, and previously created user
+
+CLEAN
+-----
+Test with no value, invalid value, and previously created user
+
+DELETE
+------
+Test with no value, invalid value, and previously created user

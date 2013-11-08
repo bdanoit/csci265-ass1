@@ -1,43 +1,41 @@
 retrieveFile Specification
+##########################
 
 Class Method new
 ----------------
 Inputs: Username, socket
-Assumtion: /
 Exceptions: If username not defined
             If socket not defined
-            If file can't be opened
+            If user file (upload/<username>.dat) can't be opened
 Behaviour:
 	Create a retrieveFile instance
 		username		   #instance string for storing username
 		sockets			#instance for socket
-      data           #instance hold the file content
-   Write from file line by line to data  
+      data           #instance array hold the file content
+   Retrieve user file from upload directory (upload/<username>.dat)
+   Store each line of user file as element in data array
 
 Class Method md5_checksum
 -------------------------
-Inputs: /
-Assumtion: The retrieveFile's instance is set right
-Exceptions: /
+Inputs: None
+Exceptions: None
 Behaviour:
-   returns retrieveFile's "data" md5 hash sum in hex  
+   returns an md5 hash of data
 
 
 Class Method retrieveFileToDir
 ------------------------------
-Inputs: /
-Assumtion: The retrieveFile's instance is set right
-            The file directory for the user file exists
-Exceptions: /
+Inputs: None
+Assumtion: file directory for the user file exists
+Exceptions: None
 Behaviour:
 	Write from retrieveFile's "data" line by line to socket
       returns 1 on success  
 
 Class Method getLineCount
 --------------------------
-Inputs: /
-Assumtion: The retrieveFile's instance is set right
-Exceptions: /
+Inputs: None
+Exceptions: None
 Behaviour:
-   return line count from retrieveFile's "data"
+   return number of elements in data
 

@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 #FSYS Admin
+#Baleze Danoit, CSCI 265
 
 #libraries
 use lib '../lib';
@@ -11,6 +12,7 @@ use warnings;
 use parse::params;
 use storage::storage;
 use generate::password;
+use exc::exception;
 use Try::Tiny;
 use Switch;
 
@@ -48,6 +50,14 @@ try{
         case 'delete'{
             $db->deleteUser($user);
             print "Deleted {$user}\n";
+        };
+        case 'listpw'{
+            my @passwords;
+            $db->passwordsByUser($user, \@passwords);
+            print "Passwords for {$user}\n";
+            foreach my $password (@passwords){
+                print "\t$password\n";
+            }
         };
     };
 }

@@ -55,5 +55,9 @@ cew_Ncase(,$params->user,uc($user),ne);
 #Test delete command
 cew_Ncase($params->parse("delete $user"),$params->command,'delete',ne);
 cew_Ncase(,$params->user,uc($user),ne);
+
+#Test list command
+cew_Ncase($params->parse("listpw $user"),$params->command,'listpw',ne);
+cew_Ncase(,$params->user,uc($user),ne);
    
 cew_Summary

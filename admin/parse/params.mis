@@ -1,4 +1,5 @@
 User Params Specification
+#########################
 
 Class Method new
 ----------------
@@ -13,15 +14,20 @@ Class Method parse
 ------------------
 Inputs: (string) args
 Exceptions:
-    if command is not valid (create,addpw,clean, delete)
+    if command is not valid
     if user name is not valid
-    if number of parameters is not two
 Behaviour:
     parses args and determines validity
         Format:
             <COMMAND> <USERNAME>
-    stores command and user in self
+        Valid Commands:
+            create
+            addpw
+            clean
+            delete
+            listpw
     changes user to uppercase
+    stores command and user in self
 
 Class Method command
 --------------------

@@ -1,4 +1,5 @@
 User Storage Specification
+##########################
 
 Class Method new
 ----------------
@@ -6,7 +7,7 @@ Inputs: None
 Exceptions: None
 Behaviour:
     Creates a Storage instance
-        db          #   instance string for storing persistent database connection
+        db          #   DBI instance for storing persistent database connection
     Creates a connection to SQLite database using DBI/DBD::SQLite
     Turns on foreign key constraints
     Loads in SQL tables if they do not exist
@@ -35,7 +36,7 @@ Behaviour:
 Class Method addUser
 --------------------
 Inputs: (string) user
-Exceptions: if user does not validate
+Exceptions: if user does not validate (validateUser method)
 Behaviour: add user to users table
 
 Class Method addPasswordsByUser
@@ -43,8 +44,8 @@ Class Method addPasswordsByUser
 Inputs: (string) user, (array reference) list
 Exceptions:
     if list is not an array reference
-    if user does not validate
-    if passwords do not validate
+    if user does not validate (validateUser method)
+    if passwords do not validate (validatePassword method)
 Behaviour: add passwords to user_passwords table
 
 Class Method deleteUser
@@ -60,16 +61,16 @@ Class Method deletePasswordByUser
 ---------------------------------
 Inputs: (string) user, (string) password
 Exceptions:
-    if user does not validate
-    if password does not validate
+    if user does not validate (validateUser method)
+    if password does not validate (validatePassword method)
 Behaviour: delete single password from user in user_passwords table
 
 Class Method deletePasswordsByUser
 ----------------------------------
 Inputs: (string) user
 Exceptions:
-    if user does not validate
-    if passwords do not validate
+    if user does not validate (validateUser method)
+    if passwords do not validate (validatePassword method)
 Behaviour: delete all passwords from user in user_passwords table
 
 Class Method validateUser
@@ -98,3 +99,4 @@ Behaviour:
         column id is not unique -> storage_user_exists
         foreign key constraint failed -> storage_user_not_exist
     throws exception containing DBI::errstr if error is present
+
