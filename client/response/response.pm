@@ -39,7 +39,6 @@ sub process{
     die exc::exception->new('response_not_received') unless defined $query;
     
     $query =~ s/\|?\n$//;
-    print $query;
     (my $type, my $value, my $checksum) = split /\|/, $query;
     
     die exc::exception->new('response_malformed') unless $type =~ /^(?:SUCCESS|ERROR)$/;

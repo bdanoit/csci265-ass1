@@ -29,12 +29,12 @@ $|=1;
 use strict;
 use warnings;
 
+use lib '../';
 use lib '../../lib';
 use exc::exception;
 use Try::Tiny;
 
-include(CewDir/bin/cew.pl)
-use lib '../';
+include(../../lib/cew/bin/cew.pl)
 use user::user;
 use storage::storage;
 
@@ -89,6 +89,7 @@ $storage0->deleteUser("1234");
 $storage0->deleteUser("jeff234");
 
 
+cew_Ncase($user0 = user::user->new("TESTUSER", "safe1test2"),0,0,!=);
 
 
    
