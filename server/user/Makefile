@@ -7,7 +7,8 @@
 #   submit
 
 # directory where scripts are located and temp files
-SD=CewDir
+SD=../../lib/cew
+BD=$(SD)/bin
 
 # code beautifier 
 INDENT=cat
@@ -15,7 +16,7 @@ INDENT=cat
 bats: tb.pl
 	perl tb.pl
 
-tb.pl: tb.cew
+tb.pl: tb.cew $(BD)/cew.pl
 	rm -f $(SD)/tmp/tb.num
 	rm -f ./tb.pl
 	awk -f $(SD)/bin/addLineNums.awk tb.cew > $(SD)/tmp/tb.num
@@ -23,9 +24,11 @@ tb.pl: tb.cew
 
 cover: tb.pl
 	perl -MDevel::Cover tb.pl
-#       cover -select $(cut) -report                                                      
+#	cover -select $(cut) -report
 	rm -r cover_db
-
 
 clean:
 	rm -f  $(SD)/tmp/* tb.pl
+
+submit:
+	echo "submit not set up"
