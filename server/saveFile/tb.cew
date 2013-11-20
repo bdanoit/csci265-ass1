@@ -76,7 +76,7 @@ close($stream);
 #++++++++++++++++++++++++++++
 
 open($stream, "<","test.tmp");
-$testsaveFile = saveFile::saveFile->new($user,$stream,4,md5_hex(@data))
+$testsaveFile = saveFile::saveFile->new($user,$stream,4,md5_hex(@data));
 cew_Ecase($testsaveFile->saveFileToDir(), "corrupt_file")
 #close($stream);
 
@@ -95,7 +95,7 @@ print $stream "foo\n";
 close($stream);
 
 open($stream, "<","test.tmp");
-$testsaveFile = saveFile::saveFile->new($user,$stream,3,md5_hex(@data))
+$testsaveFile = saveFile::saveFile->new($user,$stream,3,md5_hex(@data));
 cew_Ecase($testsaveFile->saveFileToDir(), "file_locked")
 close($stream);
 
