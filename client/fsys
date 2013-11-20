@@ -25,7 +25,7 @@ try
 {
     my $sock = new IO::Socket::INET (
         PeerAddr => 'localhost',
-        PeerPort => '9337',
+        PeerPort => '9339',
         Proto => 'tcp'
     );
     die exc::exception->new('cannot_connect_to_server') unless $sock;

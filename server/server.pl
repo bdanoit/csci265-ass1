@@ -19,7 +19,7 @@ use Switch;
 
 my $sock = new IO::Socket::INET (
     LocalHost => '',
-    LocalPort => '9337',
+    LocalPort => '9339',
     Proto => 'tcp',
     Listen => 3,
     Reuse => 1

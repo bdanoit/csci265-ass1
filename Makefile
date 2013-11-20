@@ -33,7 +33,7 @@ serverMod:
 	done
 
 adminTest:
-	(cd $(AD)/.test; ./test.csh; )
+	(cd $(AD)/.test; mkdir tact; ./test.csh; rm -rf tact;)
 
 clientTest:
-	(cd $(CD)/.test; ./test.csh; )
+	(cd $(CD)/.test; mkdir tact; ./test.csh; rm -rf tact;)
